@@ -1,9 +1,9 @@
 <?php
 /**
- * wownero_explorer_tools.php
+ * arqma_explorer_tools.php
  *
  * Uses CURL to call API functions from the block explorer
- * https://explore.wownero.com/
+ * https://blocks.arqma.com/
  *
  * @author Serhack
  * @author cryptochangements

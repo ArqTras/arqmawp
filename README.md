@@ -29,12 +29,12 @@
 
 This is the easiest way to start accepting Arqma on your website. You'll need:
 
-* Your Arqma wallet address starting with `W`
+* Your Arqma wallet address starting with `a`
 * Your wallet's secret viewkey
 
 Then simply select the `viewkey` option in the settings page and paste your address and viewkey. You're all set!
 
-Note on privacy: when you validate transactions with your private viewkey, your viewkey is sent to (but not stored on) xmrchain.net over HTTPS. This could potentially allow an attacker to see your incoming, but not outgoing, transactions if they were to get his hands on your viewkey. Even if this were to happen, your funds would still be safe and it would be impossible for somebody to steal your money. For maximum privacy use your own `arqma-wallet-rpc` instance.
+Note on privacy: when you validate transactions with your private viewkey, your viewkey is sent to (but not stored on) blocks.arqma.com over HTTPS. This could potentially allow an attacker to see your incoming, but not outgoing, transactions if they were to get his hands on your viewkey. Even if this were to happen, your funds would still be safe and it would be impossible for somebody to steal your money. For maximum privacy use your own `arqma-wallet-rpc` instance.
 
 ## Option 2: Using `arqma-wallet-rpc`
 

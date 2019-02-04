@@ -1,6 +1,6 @@
 <?php
 /**
- * wownero_wallet_rpc
+ * arqma_wallet_rpc
  *
  * Written using the JSON RPC specification -
  * http://json-rpc.org/wiki/specification
@@ -178,7 +178,7 @@ class Arqma_Wallet_Rpc
         // check for curl error
         if (0 < curl_errno($ch)) {
             if(is_admin())
-                echo '[ERROR] Failed to connect to wownero-wallet-rpc at ' . $this->host . ' port '. $this->port .'</br>';
+                echo '[ERROR] Failed to connect to arqma-wallet-rpc at ' . $this->host . ' port '. $this->port .'</br>';
         }
         // close the connection
         curl_close($ch);

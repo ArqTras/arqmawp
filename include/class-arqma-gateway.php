@@ -14,7 +14,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
     private static $_title = 'Arqma Gateway';
     private static $_method_title = 'Arqma Gateway';
     private static $_method_description = 'Arqma Gateway Plug-in for WooCommerce.';
-    private static $_errors = [];
+  //  private static $_errors = [];
 
     private static $discount = false;
     private static $valid_time = null;
