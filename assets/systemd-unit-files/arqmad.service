@@ -1,0 +1,14 @@
+[Unit]
+Description=arqma Full Node
+After=network.target
+
+[Service]
+User=arqmaservices
+Group=arqmaservices
+WorkingDirectory=/opt/arqma-data-dir
+Type=simple
+LimitNOFILE=65535
+ExecStart=/usr/bin/arqmad --log-file /var/log/arqmad.log --non-interactive
+Restart=always
+[Install]
+WantedBy=multi-user.target

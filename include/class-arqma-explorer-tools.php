@@ -13,12 +13,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class Wownero_Explorer_Tools
+class Arqma_Explorer_Tools
 {
     private $url;
     public function __construct($testnet = false)
     {
-        $this->url = $testnet ? WOWNERO_GATEWAY_TESTNET_EXPLORER_URL : WOWNERO_GATEWAY_MAINNET_EXPLORER_URL;
+        $this->url = $testnet ? ARQMA_GATEWAY_TESTNET_EXPLORER_URL : ARQMA_GATEWAY_MAINNET_EXPLORER_URL;
     }
 
     private function call_api($endpoint)

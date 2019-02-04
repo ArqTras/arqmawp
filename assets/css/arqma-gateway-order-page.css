@@ -1,26 +1,26 @@
-#wownero_payment_messages > span {
+#arqma_payment_messages > span {
     display:none;
 }
-.wownero_details_row {
+.arqma_details_row {
     display: flex !important;
     align-items: center;
     margin:0 -8px;
 }
-.wownero_details_row > * {
+.arqma_details_row > * {
     padding:0 8px;
 }
-.wownero_details_left {
+.arqma_details_left {
 }
-.wownero_details_main {
+.arqma_details_main {
     flex-grow: 1;
     word-break:break-all;
 }
-.wownero_details_right.button-row {
+.arqma_details_right.button-row {
     display:flex;
     margin-top: 5px;
     align-self: self-start;
 }
-.wownero_details_right.button-row button {
+.arqma_details_right.button-row button {
     width: 32px;
     height: 32px;
     padding: 6px 2px;
@@ -28,10 +28,10 @@
     line-height:28px;
     text-align:center;
 }
-#wownero_integrated_address {
+#arqma_integrated_address {
     line-height: 16px;
 }
-#wownero_qr_code_container {
+#arqma_qr_code_container {
     position:fixed;
     top:0;
     left:0;
@@ -40,7 +40,7 @@
     z-index:9999;
     background:rgba(0,0,0,0.5);
 }
-#wownero_qr_code {
+#arqma_qr_code {
     position: absolute;
     width: 256px;
     height: 256px;
@@ -52,13 +52,13 @@
     background: white;
     border-radius: 5px;
 }
-#wownero_toast {
+#arqma_toast {
     position: fixed;
     z-index: 999;
     top: 32px;
     right: 12px;
 }
-#wownero_toast > div {
+#arqma_toast > div {
     display: block;
     position: relative;
     overflow: hidden;
@@ -70,9 +70,9 @@
     color: white;
     right: -400px;
 }
-#wownero_toast > div.success {
+#arqma_toast > div.success {
     background: rgba(68, 190, 117, 0.8);
 }
-#wownero_toast > div.error {
+#arqma_toast > div.error {
     background: rgba(195, 60, 60, 0.8);
 }

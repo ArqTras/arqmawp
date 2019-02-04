@@ -10,7 +10,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class Wownero_base58 {
+class Arqma_base58 {
     /**
      * @var string
      */

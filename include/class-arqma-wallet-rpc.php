@@ -13,7 +13,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class Wownero_Wallet_Rpc
+class Arqma_Wallet_Rpc
 {
     protected $url = null, $is_debug = false;
     protected $curl_options = array(
@@ -214,7 +214,7 @@ class Wownero_Wallet_Rpc
     }
 
     /*
-     * The following functions can all be called to interact with the Wownero RPC wallet
+     * The following functions can all be called to interact with the Arqma RPC wallet
      * They will majority of them will return the result as an array
      * Example: $daemon->address(); where $daemon is an instance of this class, will return the wallet address as string within an array
      */
@@ -282,7 +282,7 @@ class Wownero_Wallet_Rpc
     public function make_uri($address, $amount, $recipient_name = null, $description = null)
     {
         // Convert to atomic units
-        $new_amount = $amount * WOWNERO_GATEWAY_ATOMIC_UNITS_POW;
+        $new_amount = $amount * ARQMA_GATEWAY_ATOMIC_UNITS_POW;
 
         $uri_params = array('address' => $address, 'amount' => $new_amount, 'payment_id' => '', 'recipient_name' => $recipient_name, 'tx_description' => $description);
         $uri = $this->_run('make_uri', $uri_params);
@@ -298,7 +298,7 @@ class Wownero_Wallet_Rpc
 
     public function transfer($amount, $address, $mixin = 12)
     {
-        $new_amount = $amount * WOWNERO_GATEWAY_ATOMIC_UNITS_POW;
+        $new_amount = $amount * ARQMA_GATEWAY_ATOMIC_UNITS_POW;
         $destinations = array('amount' => $new_amount, 'address' => $address);
         $transfer_parameters = array('destinations' => array($destinations), 'mixin' => $mixin, 'get_tx_key' => true, 'unlock_time' => 0, 'payment_id' => '');
         $transfer_method = $this->_run('transfer', $transfer_parameters);
