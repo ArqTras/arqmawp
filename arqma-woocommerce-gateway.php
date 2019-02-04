@@ -176,9 +176,9 @@ function arqma_init() {
         $currency = strtoupper($a['currency']);
         $rate = Arqma_Gateway::get_live_rate($currency);
         if($currency == 'BTC')
-            $rate_formatted = sprintf('%.8f', $rate / 1e8);
+            $rate_formatted = sprintf('%.8f', $rate / 1e9);
         else
-            $rate_formatted = sprintf('%.5f', $rate / 1e8);
+            $rate_formatted = sprintf('%.5f', $rate / 1e9);
 
         return "<span class=\"arqma-price\">1 XMR = $rate_formatted $currency</span>";
     }
