@@ -1,19 +1,19 @@
 <?php
 /*
- * Main Gateway of Wownero using either a local daemon or the explorer
+ * Main Gateway of Arqma using either a local daemon or the explorer
  * Authors: Serhack, cryptochangements, mosu-forge
  */
 
 defined( 'ABSPATH' ) || exit;
 
-require_once('class-wownero-cryptonote.php');
+require_once('class-arqma-cryptonote.php');
 
-class Wownero_Gateway extends WC_Payment_Gateway
+class Arqma_Gateway extends WC_Payment_Gateway
 {
-    private static $_id = 'wownero_gateway';
-    private static $_title = 'Wownero Gateway';
-    private static $_method_title = 'Wownero Gateway';
-    private static $_method_description = 'Wownero Gateway Plug-in for WooCommerce.';
+    private static $_id = 'arqma_gateway';
+    private static $_title = 'Arqma Gateway';
+    private static $_method_title = 'Arqma Gateway';
+    private static $_method_description = 'Arqma Gateway Plug-in for WooCommerce.';
     private static $_errors = [];
 
     private static $discount = false;
@@ -27,12 +27,12 @@ class Wownero_Gateway extends WC_Payment_Gateway
     private static $testnet = false;
     private static $onion_service = false;
     private static $show_qr = false;
-    private static $use_wownero_price = false;
-    private static $use_wownero_price_decimals = WOWNERO_GATEWAY_ATOMIC_UNITS;
+    private static $use_arqma_price = false;
+    private static $use_arqma_price_decimals = ARQMA_GATEWAY_ATOMIC_UNITS;
 
     private static $cryptonote;
-    private static $wownero_wallet_rpc;
-    private static $wownero_explorer_tools;
+    private static $arqma_wallet_rpc;
+    private static $arqma_explorer_tools;
     private static $log;
 
     private static $rates = array();
@@ -41,14 +41,14 @@ class Wownero_Gateway extends WC_Payment_Gateway
 
     public function get_icon()
     {
-        return apply_filters('woocommerce_gateway_icon', '<img src="'.WOWNERO_GATEWAY_PLUGIN_URL.'assets/images/wownero-icon.png"/>');
+        return apply_filters('woocommerce_gateway_icon', '<img src="'.ARQMA_GATEWAY_PLUGIN_URL.'assets/images/arqma-icon.png"/>');
     }
 
     function __construct($add_action=true)
     {
         $this->id = self::$_id;
-        $this->method_title = __(self::$_method_title, 'wownero_gateway');
-        $this->method_description = __(self::$_method_description, 'wownero_gateway');
+        $this->method_title = __(self::$_method_title, 'arqma_gateway');
+        $this->method_description = __(self::$_method_description, 'arqma_gateway');
         $this->has_fields = false;
         $this->supports = array(
             'products',
@@ -73,30 +73,30 @@ class Wownero_Gateway extends WC_Payment_Gateway
         self::$valid_time = $this->settings['valid_time'];
         self::$confirms = $this->settings['confirms'];
         self::$confirm_type = $this->settings['confirm_type'];
-        self::$address = $this->settings['wownero_address'];
+        self::$address = $this->settings['arqma_address'];
         self::$viewkey = $this->settings['viewkey'];
         self::$host = $this->settings['daemon_host'];
         self::$port = $this->settings['daemon_port'];
         self::$testnet = $this->settings['testnet'] == 'yes';
         self::$onion_service = $this->settings['onion_service'] == 'yes';
         self::$show_qr = $this->settings['show_qr'] == 'yes';
-        self::$use_wownero_price = $this->settings['use_wownero_price'] == 'yes';
-        self::$use_wownero_price_decimals = $this->settings['use_wownero_price_decimals'];
+        self::$use_arqma_price = $this->settings['use_arqma_price'] == 'yes';
+        self::$use_arqma_price_decimals = $this->settings['use_arqma_price_decimals'];
 
-        $explorer_url = self::$testnet ? WOWNERO_GATEWAY_TESTNET_EXPLORER_URL : WOWNERO_GATEWAY_MAINNET_EXPLORER_URL;
-        defined('WOWNERO_GATEWAY_EXPLORER_URL') || define('WOWNERO_GATEWAY_EXPLORER_URL', $explorer_url);
+        $explorer_url = self::$testnet ? ARQMA_GATEWAY_TESTNET_EXPLORER_URL : ARQMA_GATEWAY_MAINNET_EXPLORER_URL;
+        defined('ARQMA_GATEWAY_EXPLORER_URL') || define('ARQMA_GATEWAY_EXPLORER_URL', $explorer_url);
 
         if($add_action)
             add_action('woocommerce_update_options_payment_gateways_'.$this->id, array($this, 'process_admin_options'));
 
         // Initialize helper classes
-        self::$cryptonote = new Wownero_Cryptonote();
-        if(self::$confirm_type == 'wownero-wallet-rpc') {
-            require_once('class-wownero-wallet-rpc.php');
-            self::$wownero_wallet_rpc = new Wownero_Wallet_Rpc(self::$host, self::$port);
+        self::$cryptonote = new Arqma_Cryptonote();
+        if(self::$confirm_type == 'arqma-wallet-rpc') {
+            require_once('class-arqma-wallet-rpc.php');
+            self::$arqma_wallet_rpc = new Arqma_Wallet_Rpc(self::$host, self::$port);
         } else {
-            require_once('class-wownero-explorer-tools.php');
-            self::$wownero_explorer_tools = new Wownero_Explorer_Tools(self::$testnet);
+            require_once('class-arqma-explorer-tools.php');
+            self::$arqma_explorer_tools = new Arqma_Explorer_Tools(self::$testnet);
         }
 
         self::$log = new WC_Logger();
@@ -104,16 +104,16 @@ class Wownero_Gateway extends WC_Payment_Gateway
 
     public function init_form_fields()
     {
-        $this->form_fields = include 'admin/wownero-gateway-admin-settings.php';
+        $this->form_fields = include 'admin/arqma-gateway-admin-settings.php';
     }
 
-    public function validate_wownero_address_field($key,$address)
+    public function validate_arqma_address_field($key,$address)
     {
         if($this->settings['confirm_type'] == 'viewkey') {
-            if (strlen($address) == 97 && substr($address, 0, 1) == 'W')
+            if (strlen($address) == 97 && substr($address, 0, 1) == 'a')
                 if(self::$cryptonote->verify_checksum($address))
                     return $address;
-            self::$_errors[] = 'Wownero address is invalid';
+            self::$_errors[] = 'Arqma address is invalid';
         }
         return $address;
     }
@@ -148,12 +148,12 @@ class Wownero_Gateway extends WC_Payment_Gateway
     public function admin_options()
     {
         $confirm_type = self::$confirm_type;
-        if($confirm_type === 'wownero-wallet-rpc')
+        if($confirm_type === 'arqma-wallet-rpc')
             $balance = self::admin_balance_info();
 
         $settings_html = $this->generate_settings_html(array(), false);
         $errors = array_merge(self::$_errors, $this->admin_php_module_check(), $this->admin_ssl_check());
-        include WOWNERO_GATEWAY_PLUGIN_DIR . '/templates/wownero-gateway/admin/settings-page.php';
+        include ARQMA_GATEWAY_PLUGIN_DIR . '/templates/arqma-gateway/admin/settings-page.php';
     }
 
     public static function admin_balance_info()
@@ -165,11 +165,11 @@ class Wownero_Gateway extends WC_Payment_Gateway
                 'unlocked_balance' => 'Not Available',
             );
         }
-        $wallet_amount = self::$wownero_wallet_rpc->getbalance();
-        $height = self::$wownero_wallet_rpc->getheight();
+        $wallet_amount = self::$arqma_wallet_rpc->getbalance();
+        $height = self::$arqma_wallet_rpc->getheight();
         if (!isset($wallet_amount)) {
-            self::$_errors[] = 'Cannot connect to wownero-wallet-rpc';
-            self::$log->add('Wownero_Payments', '[ERROR] Cannot connect to wownero-wallet-rpc');
+            self::$_errors[] = 'Cannot connect to arqma-wallet-rpc';
+            self::$log->add('Arqma_Payments', '[ERROR] Cannot connect to arqma-wallet-rpc');
             return array(
                 'height' => 'Not Available',
                 'balance' => 'Not Available',
@@ -178,8 +178,8 @@ class Wownero_Gateway extends WC_Payment_Gateway
         } else {
             return array(
                 'height' => $height,
-                'balance' => self::format_wownero($wallet_amount['balance']).' Wownero',
-                'unlocked_balance' => self::format_wownero($wallet_amount['unlocked_balance']).' Wownero'
+                'balance' => self::format_arqma($wallet_amount['balance']).' Arqma',
+                'unlocked_balance' => self::format_arqma($wallet_amount['unlocked_balance']).' Arqma'
             );
         }
     }
@@ -204,11 +204,11 @@ class Wownero_Gateway extends WC_Payment_Gateway
     public function process_payment($order_id)
     {
         global $wpdb;
-        $table_name = $wpdb->prefix.'wownero_gateway_quotes';
+        $table_name = $wpdb->prefix.'arqma_gateway_quotes';
 
         $order = wc_get_order($order_id);
 
-        if(self::$confirm_type != 'wownero-wallet-rpc') {
+        if(self::$confirm_type != 'arqma-wallet-rpc') {
           // Generate a unique payment id
           do {
               $payment_id = bin2hex(openssl_random_pseudo_bytes(8));
@@ -218,28 +218,28 @@ class Wownero_Gateway extends WC_Payment_Gateway
         }
         else {
           // Generate subaddress
-          $payment_id = self::$wownero_wallet_rpc->create_address(0, 'Order: ' . $order_id);
+          $payment_id = self::$arqma_wallet_rpc->create_address(0, 'Order: ' . $order_id);
           if(isset($payment_id['address'])) {
             $payment_id = $payment_id['address'];
           }
           else {
-            $this->log->add('Wownero_Gateway', 'Couldn\'t create subaddress for order ' . $order_id);
+            $this->log->add('Arqma_Gateway', 'Couldn\'t create subaddress for order ' . $order_id);
           }
         }
 
         $currency = $order->get_currency();
         $rate = self::get_live_rate($currency);
         $fiat_amount = $order->get_total('');
-        $wownero_amount = 1e8 * $fiat_amount / $rate;
+        $arqma_amount = 1e8 * $fiat_amount / $rate;
 
         if(self::$discount)
-            $wownero_amount = $wownero_amount - $wownero_amount * self::$discount / 100;
+            $arqma_amount = $arqma_amount - $arqma_amount * self::$discount / 100;
 
-        $wownero_amount = intval($wownero_amount * WOWNERO_GATEWAY_ATOMIC_UNITS_POW);
-        $query = $wpdb->prepare("INSERT INTO $table_name (order_id, payment_id, currency, rate, amount) VALUES (%d, %s, %s, %d, %d)", array($order_id, $payment_id, $currency, $rate, $wownero_amount));
+        $arqma_amount = intval($arqma_amount * ARQMA_GATEWAY_ATOMIC_UNITS_POW);
+        $query = $wpdb->prepare("INSERT INTO $table_name (order_id, payment_id, currency, rate, amount) VALUES (%d, %s, %s, %d, %d)", array($order_id, $payment_id, $currency, $rate, $arqma_amount));
         $wpdb->query($query);
 
-        $order->update_status('on-hold', __('Awaiting offline payment', 'wownero_gateway'));
+        $order->update_status('on-hold', __('Awaiting offline payment', 'arqma_gateway'));
         $order->reduce_order_stock(); // Reduce stock levels
         WC()->cart->empty_cart(); // Remove cart
 
@@ -258,8 +258,8 @@ class Wownero_Gateway extends WC_Payment_Gateway
     {
         global $wpdb;
 
-        // Get usd and btc price for wownero
-        $api_link = 'https://api.coingecko.com/api/v3/coins/wownero/tickers?page=1';
+        // Get usd and btc price for arqma
+        $api_link = 'https://api.coingecko.com/api/v3/coins/arqma/tickers?page=1';
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_RETURNTRANSFER => 1,
@@ -270,7 +270,7 @@ class Wownero_Gateway extends WC_Payment_Gateway
         $price = json_decode($resp, true);
         if( ! isset( $price['tickers'][0]['converted_last']['usd'] ) ||
             ! isset( $price['tickers'][0]['converted_last']['btc'] ) ) {
-          $this->log->add('Wownero_Gateway', '[ERROR] coingecko.com api');
+          $this->log->add('Arqma_Gateway', '[ERROR] coingecko.com api');
         }
         else {
           $usd = $price['tickers'][0]['converted_last']['usd'];
@@ -288,11 +288,11 @@ class Wownero_Gateway extends WC_Payment_Gateway
           $price = json_decode($resp, true);
 
           if( ! isset( $price['rates'] ) ) {
-            $this->log->add('Wownero_Gateway', '[ERROR] exchangeratesapi.io');
+            $this->log->add('Arqma_Gateway', '[ERROR] exchangeratesapi.io');
           }
           else {
             $rates = $price['rates'];
-            $table_name = $wpdb->prefix.'wownero_gateway_live_rates';
+            $table_name = $wpdb->prefix.'arqma_gateway_live_rates';
             //usd
             $rate = intval($usd * 1e8);
             $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array('USD', $rate, $rate));
@@ -314,17 +314,17 @@ class Wownero_Gateway extends WC_Payment_Gateway
 
 
         // Get current network/wallet height
-        if(self::$confirm_type == 'wownero-wallet-rpc') {
-            $height = self::$wownero_wallet_rpc->getheight();
+        if(self::$confirm_type == 'arqma-wallet-rpc') {
+            $height = self::$arqma_wallet_rpc->getheight();
         }
         else {
-            $height = self::$wownero_explorer_tools->getheight();
+            $height = self::$arqma_explorer_tools->getheight();
         }
-        set_transient('wownero_gateway_network_height', $height);
+        set_transient('arqma_gateway_network_height', $height);
 
         // Get pending payments
-        $table_name_1 = $wpdb->prefix.'wownero_gateway_quotes';
-        $table_name_2 = $wpdb->prefix.'wownero_gateway_quotes_txids';
+        $table_name_1 = $wpdb->prefix.'arqma_gateway_quotes';
+        $table_name_2 = $wpdb->prefix.'arqma_gateway_quotes_txids';
 
         $query = $wpdb->prepare("SELECT *, $table_name_1.payment_id AS payment_id, $table_name_1.amount AS amount_total, $table_name_2.amount AS amount_paid, NOW() as now FROM $table_name_1 LEFT JOIN $table_name_2 ON $table_name_1.payment_id = $table_name_2.payment_id WHERE pending=1", array());
         $rows = $wpdb->get_results($query);
@@ -350,9 +350,9 @@ class Wownero_Gateway extends WC_Payment_Gateway
             $order_id = $quote->order_id;
             $order = wc_get_order($order_id);
             $payment_id = self::sanatize_id($quote->payment_id);
-            $amount_wownero = $quote->amount_total;
+            $amount_arqma = $quote->amount_total;
 
-            if(self::$confirm_type == 'wownero-wallet-rpc')
+            if(self::$confirm_type == 'arqma-wallet-rpc')
                 $new_txs = self::check_payment_rpc($payment_id);
             else
                 $new_txs = self::check_payment_explorer($payment_id);
@@ -381,7 +381,7 @@ class Wownero_Gateway extends WC_Payment_Gateway
                 $heights[] = $tx->height;
             }
 
-            $paid = $amount_paid > $amount_wownero - WOWNERO_GATEWAY_ATOMIC_UNIT_THRESHOLD;
+            $paid = $amount_paid > $amount_arqma - ARQMA_GATEWAY_ATOMIC_UNIT_THRESHOLD;
 
             if($paid) {
                 if(self::$confirms == 0) {
@@ -399,20 +399,20 @@ class Wownero_Gateway extends WC_Payment_Gateway
             }
 
             if($paid && $confirmed) {
-                self::$log->add('Wownero_Payments', "[SUCCESS] Payment has been confirmed for order id $order_id and payment id $payment_id");
+                self::$log->add('Arqma_Payments', "[SUCCESS] Payment has been confirmed for order id $order_id and payment id $payment_id");
                 $query = $wpdb->prepare("UPDATE $table_name_1 SET confirmed=1,paid=1,pending=0 WHERE payment_id=%s", array($payment_id));
                 $wpdb->query($query);
 
                 unset(self::$payment_details[$order_id]);
 
                 if(self::is_virtual_in_cart($order_id) == true){
-                    $order->update_status('completed', __('Payment has been received.', 'wownero_gateway'));
+                    $order->update_status('completed', __('Payment has been received.', 'arqma_gateway'));
                 } else {
-                    $order->update_status('processing', __('Payment has been received.', 'wownero_gateway'));
+                    $order->update_status('processing', __('Payment has been received.', 'arqma_gateway'));
                 }
 
             } else if($paid) {
-                self::$log->add('Wownero_Payments', "[SUCCESS] Payment has been received for order id $order_id and payment id $payment_id");
+                self::$log->add('Arqma_Payments', "[SUCCESS] Payment has been received for order id $order_id and payment id $payment_id");
                 $query = $wpdb->prepare("UPDATE $table_name_1 SET paid=1 WHERE payment_id=%s", array($payment_id));
                 $wpdb->query($query);
 
@@ -423,13 +423,13 @@ class Wownero_Gateway extends WC_Payment_Gateway
                 $timestamp_now = new DateTime($quote->now);
                 $order_age_seconds = $timestamp_now->getTimestamp() - $timestamp_created->getTimestamp();
                 if($order_age_seconds > self::$valid_time) {
-                    self::$log->add('Wownero_Payments', "[FAILED] Payment has expired for order id $order_id and payment id $payment_id");
+                    self::$log->add('Arqma_Payments', "[FAILED] Payment has expired for order id $order_id and payment id $payment_id");
                     $query = $wpdb->prepare("UPDATE $table_name_1 SET pending=0 WHERE payment_id=%s", array($payment_id));
                     $wpdb->query($query);
 
                     unset(self::$payment_details[$order_id]);
 
-                    $order->update_status('cancelled', __('Payment has expired.', 'wownero_gateway'));
+                    $order->update_status('cancelled', __('Payment has expired.', 'arqma_gateway'));
                 }
             }
         }
@@ -438,15 +438,15 @@ class Wownero_Gateway extends WC_Payment_Gateway
     protected static function check_payment_rpc($payment_id)
     {
         $txs = array();
-        $address_index = self::$wownero_wallet_rpc->get_address_index($payment_id);
+        $address_index = self::$arqma_wallet_rpc->get_address_index($payment_id);
         if(isset($address_index['index']['minor'])){
           $address_index = $address_index['index']['minor'];
         }
         else {
-          self::$log->add('Wownero_Gateway', '[ERROR] Couldn\'t get address index of subaddress: ' . $payment_id);
+          self::$log->add('Arqma_Gateway', '[ERROR] Couldn\'t get address index of subaddress: ' . $payment_id);
           return $txs;
         }
-        $payments = self::$wownero_wallet_rpc->get_transfers(array( 'in' => true, 'pool' => true, 'subaddr_indices' => array($address_index)));
+        $payments = self::$arqma_wallet_rpc->get_transfers(array( 'in' => true, 'pool' => true, 'subaddr_indices' => array($address_index)));
         if(isset($payments['in'])) {
           foreach($payments['in'] as $payment) {
               $txs[] = array(
@@ -471,7 +471,7 @@ class Wownero_Gateway extends WC_Payment_Gateway
     public static function check_payment_explorer($payment_id)
     {
         $txs = array();
-        $outputs = self::$wownero_explorer_tools->get_outputs(self::$address, self::$viewkey);
+        $outputs = self::$arqma_explorer_tools->get_outputs(self::$address, self::$viewkey);
         foreach($outputs as $payment) {
             if($payment['payment_id'] == $payment_id) {
                 $txs[] = array(
@@ -493,8 +493,8 @@ class Wownero_Gateway extends WC_Payment_Gateway
             return self::$payment_details[$order_id];
 
         global $wpdb;
-        $table_name_1 = $wpdb->prefix.'wownero_gateway_quotes';
-        $table_name_2 = $wpdb->prefix.'wownero_gateway_quotes_txids';
+        $table_name_1 = $wpdb->prefix.'arqma_gateway_quotes';
+        $table_name_2 = $wpdb->prefix.'arqma_gateway_quotes_txids';
         $query = $wpdb->prepare("SELECT *, $table_name_1.payment_id AS payment_id, $table_name_1.amount AS amount_total, $table_name_2.amount AS amount_paid, NOW() as now FROM $table_name_1 LEFT JOIN $table_name_2 ON $table_name_1.payment_id = $table_name_2.payment_id WHERE order_id=%d", array($order_id));
         $details = $wpdb->get_results($query);
         if (count($details)) {
@@ -508,7 +508,7 @@ class Wownero_Gateway extends WC_Payment_Gateway
                     'txid' => $tx->txid,
                     'height' => $tx->height,
                     'amount' => $tx->amount_paid,
-                    'amount_formatted' => self::format_wownero($tx->amount_paid)
+                    'amount_formatted' => self::format_arqma($tx->amount_paid)
                 );
                 $amount_paid += $tx->amount_paid;
                 $heights[] = $tx->height;
@@ -520,14 +520,14 @@ class Wownero_Gateway extends WC_Payment_Gateway
             });
 
             if(count($heights) && !in_array(0, $heights)) {
-                $height = get_transient('wownero_gateway_network_height');
+                $height = get_transient('arqma_gateway_network_height');
                 $highest_block = max($heights);
                 $confirms = $height - $highest_block;
                 $blocks_to_confirm = self::$confirms - $confirms;
             } else {
                 $blocks_to_confirm = self::$confirms;
             }
-            $time_to_confirm = self::format_seconds_to_time($blocks_to_confirm * WOWNERO_GATEWAY_DIFFICULTY_TARGET);
+            $time_to_confirm = self::format_seconds_to_time($blocks_to_confirm * ARQMA_GATEWAY_DIFFICULTY_TARGET);
 
             $amount_total = $details[0]->amount_total;
             $amount_due = max(0, $amount_total - $amount_paid);
@@ -541,7 +541,7 @@ class Wownero_Gateway extends WC_Payment_Gateway
             $address = self::$address;
             $payment_id = self::sanatize_id($details[0]->payment_id);
 
-            if(self::$confirm_type == 'wownero-wallet-rpc') {
+            if(self::$confirm_type == 'arqma-wallet-rpc') {
                 $integrated_addr = $payment_id;
             } else {
                 if ($address) {
@@ -550,8 +550,8 @@ class Wownero_Gateway extends WC_Payment_Gateway
                     $pub_viewkey = $decoded_address['viewkey'];
                     $integrated_addr = self::$cryptonote->integrated_addr_from_keys($pub_spendkey, $pub_viewkey, $payment_id);
                 } else {
-                    self::$log->add('Wownero_Gateway', '[ERROR] Merchant has not set Wownero address');
-                    return '[ERROR] Merchant has not set Wownero address';
+                    self::$log->add('Arqma_Gateway', '[ERROR] Merchant has not set Arqma address');
+                    return '[ERROR] Merchant has not set Arqma address';
                 }
             }
 
@@ -578,7 +578,7 @@ class Wownero_Gateway extends WC_Payment_Gateway
                 }
             }
 
-            $qrcode_uri = 'wownero:'.$address.'?tx_amount='.$amount_due.'&tx_payment_id='.$payment_id;
+            $qrcode_uri = 'arqma:'.$address.'?tx_amount='.$amount_due.'&tx_payment_id='.$payment_id;
             $my_order_url = wc_get_endpoint_url('view-order', $order_id, wc_get_page_permalink('myaccount'));
 
             $payment_details = array(
@@ -593,9 +593,9 @@ class Wownero_Gateway extends WC_Payment_Gateway
                 'amount_total' => $amount_total,
                 'amount_paid' => $amount_paid,
                 'amount_due' => $amount_due,
-                'amount_total_formatted' => self::format_wownero($amount_total),
-                'amount_paid_formatted' => self::format_wownero($amount_paid),
-                'amount_due_formatted' => self::format_wownero($amount_due),
+                'amount_total_formatted' => self::format_arqma($amount_total),
+                'amount_paid_formatted' => self::format_arqma($amount_paid),
+                'amount_due_formatted' => self::format_arqma($amount_due),
                 'status' => $status,
                 'created' => $details[0]->created,
                 'order_age' => $order_age_seconds,
@@ -625,7 +625,7 @@ class Wownero_Gateway extends WC_Payment_Gateway
             self::ajax_output(array('error' => '[ERROR] Order does not belong to this user'));
 
         if($order->get_payment_method() != self::$_id)
-            self::ajax_output(array('error' => '[ERROR] Order not paid for with Wownero'));
+            self::ajax_output(array('error' => '[ERROR] Order not paid for with Arqma'));
 
         $details = self::get_payment_details($order);
         if(!is_array($details))
@@ -651,10 +651,10 @@ class Wownero_Gateway extends WC_Payment_Gateway
         $details = self::get_payment_details($order);
         if(!is_array($details)) {
             $error = $details;
-            include WOWNERO_GATEWAY_PLUGIN_DIR . '/templates/wownero-gateway/admin/order-history-error-page.php';
+            include ARQMA_GATEWAY_PLUGIN_DIR . '/templates/arqma-gateway/admin/order-history-error-page.php';
             return;
         }
-        include WOWNERO_GATEWAY_PLUGIN_DIR . '/templates/wownero-gateway/admin/order-history-page.php';
+        include ARQMA_GATEWAY_PLUGIN_DIR . '/templates/arqma-gateway/admin/order-history-page.php';
     }
 
     public static function customer_order_page($order)
@@ -673,13 +673,13 @@ class Wownero_Gateway extends WC_Payment_Gateway
         $details = self::get_payment_details($order_id);
         if(!is_array($details)) {
             $error = $details;
-            include WOWNERO_GATEWAY_PLUGIN_DIR . '/templates/wownero-gateway/customer/order-error-page.php';
+            include ARQMA_GATEWAY_PLUGIN_DIR . '/templates/arqma-gateway/customer/order-error-page.php';
             return;
         }
         $show_qr = self::$show_qr;
         $details_json = json_encode($details);
-        $ajax_url = WC_AJAX::get_endpoint('wownero_gateway_payment_details');
-        include WOWNERO_GATEWAY_PLUGIN_DIR . '/templates/wownero-gateway/customer/order-page.php';
+        $ajax_url = WC_AJAX::get_endpoint('arqma_gateway_payment_details');
+        include ARQMA_GATEWAY_PLUGIN_DIR . '/templates/arqma-gateway/customer/order-page.php';
     }
 
     public static function customer_order_email($order)
@@ -697,10 +697,10 @@ class Wownero_Gateway extends WC_Payment_Gateway
         $method_title = self::$_title;
         $details = self::get_payment_details($order_id);
         if(!is_array($details)) {
-            include WOWNERO_GATEWAY_PLUGIN_DIR . '/templates/wownero-gateway/customer/order-email-error-block.php';
+            include ARQMA_GATEWAY_PLUGIN_DIR . '/templates/arqma-gateway/customer/order-email-error-block.php';
             return;
         }
-        include WOWNERO_GATEWAY_PLUGIN_DIR . '/templates/wownero-gateway/customer/order-email-block.php';
+        include ARQMA_GATEWAY_PLUGIN_DIR . '/templates/arqma-gateway/customer/order-email-block.php';
     }
 
     public static function get_id()
@@ -718,23 +718,23 @@ class Wownero_Gateway extends WC_Payment_Gateway
         return self::$show_qr;
     }
 
-    public static function use_wownero_price()
+    public static function use_arqma_price()
     {
-        return self::$use_wownero_price;
+        return self::$use_arqma_price;
     }
 
 
     public static function convert_wc_price($price, $currency)
     {
         $rate = self::get_live_rate($currency);
-        $wownero_amount = intval(WOWNERO_GATEWAY_ATOMIC_UNITS_POW * 1e8 * $price / $rate) / WOWNERO_GATEWAY_ATOMIC_UNITS_POW;
-        $wownero_amount_formatted = sprintf('%.'.self::$use_wownero_price_decimals.'f', $wownero_amount);
+        $arqma_amount = intval(ARQMA_GATEWAY_ATOMIC_UNITS_POW * 1e8 * $price / $rate) / ARQMA_GATEWAY_ATOMIC_UNITS_POW;
+        $arqma_amount_formatted = sprintf('%.'.self::$use_arqma_price_decimals.'f', $arqma_amount);
 
         return <<<HTML
             <span class="woocommerce-Price-amount amount" data-price="$price" data-currency="$currency"
         data-rate="$rate" data-rate-type="live">
-            $wownero_amount_formatted
-            <span class="woocommerce-Price-currencySymbol">WOW</span>
+            $arqma_amount_formatted
+            <span class="woocommerce-Price-currencySymbol">ARQ</span>
         </span>
 
 HTML;
@@ -758,14 +758,14 @@ HTML;
         $price = array_pop($matches);
         $currency = $payment_details['currency'];
         $rate = $payment_details['rate'];
-        $wownero_amount = intval(WOWNERO_GATEWAY_ATOMIC_UNITS_POW * 1e8 * $price / $rate) / WOWNERO_GATEWAY_ATOMIC_UNITS_POW;
-        $wownero_amount_formatted = sprintf('%.'.WOWNERO_GATEWAY_ATOMIC_UNITS.'f', $wownero_amount);
+        $arqma_amount = intval(ARQMA_GATEWAY_ATOMIC_UNITS_POW * 1e8 * $price / $rate) / ARQMA_GATEWAY_ATOMIC_UNITS_POW;
+        $arqma_amount_formatted = sprintf('%.'.ARQMA_GATEWAY_ATOMIC_UNITS.'f', $arqma_amount);
 
         return <<<HTML
             <span class="woocommerce-Price-amount amount" data-price="$price" data-currency="$currency"
         data-rate="$rate" data-rate-type="fixed">
-            $wownero_amount_formatted
-            <span class="woocommerce-Price-currencySymbol">WOW</span>
+            $arqma_amount_formatted
+            <span class="woocommerce-Price-currencySymbol">ARQ</span>
         </span>
 
 HTML;
@@ -777,7 +777,7 @@ HTML;
             return self::$rates[$currency];
 
         global $wpdb;
-        $table_name = $wpdb->prefix.'wownero_gateway_live_rates';
+        $table_name = $wpdb->prefix.'arqma_gateway_live_rates';
         $query = $wpdb->prepare("SELECT rate FROM $table_name WHERE currency=%s", array($currency));
 
         $rate = $wpdb->get_row($query)->rate;
@@ -809,8 +809,8 @@ HTML;
         return $virtual_items == $cart_size;
     }
 
-    public static function format_wownero($atomic_units) {
-        return sprintf(WOWNERO_GATEWAY_ATOMIC_UNITS_SPRINTF, $atomic_units / WOWNERO_GATEWAY_ATOMIC_UNITS_POW);
+    public static function format_arqma($atomic_units) {
+        return sprintf(ARQMA_GATEWAY_ATOMIC_UNITS_SPRINTF, $atomic_units / ARQMA_GATEWAY_ATOMIC_UNITS_POW);
     }
 
     public static function format_seconds_to_time($seconds)

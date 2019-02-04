@@ -1,19 +1,19 @@
 <?php
 /*
  * Copyright (c) 2018, Ryo Currency Project
- * Admin interface for Wownero gateway
+ * Admin interface for Arqma gateway
  * Authors: mosu-forge
  */
 
 defined( 'ABSPATH' ) || exit;
 
-require_once('class-wownero-admin-payments-list.php');
+require_once('class-arqma-admin-payments-list.php');
 
-if (class_exists('Wownero_Admin_Interface', false)) {
-    return new Wownero_Admin_Interface();
+if (class_exists('Arqma_Admin_Interface', false)) {
+    return new Arqma_Admin_Interface();
 }
 
-class Wownero_Admin_Interface {
+class Arqma_Admin_Interface {
 
     public function __construct() {
         add_action('add_meta_boxes', array($this, 'meta_boxes'));
@@ -26,8 +26,8 @@ class Wownero_Admin_Interface {
      */
     public function meta_boxes() {
         add_meta_box(
-            'wownero_admin_order_details',
-            __('Wownero Gateway','wownero_gateway'),
+            'arqma_admin_order_details',
+            __('Arqma Gateway','arqma_gateway'),
             array($this, 'meta_box_order_details'),
             'shop_order',
             'normal',
@@ -39,7 +39,7 @@ class Wownero_Admin_Interface {
      * Meta box for order page
      */
     public function meta_box_order_details($order) {
-        Wownero_Gateway::admin_order_page($order);
+        Arqma_Gateway::admin_order_page($order);
     }
 
     /**
@@ -47,30 +47,30 @@ class Wownero_Admin_Interface {
      */
     public function admin_menu() {
         add_menu_page(
-            __('Wownero', 'wownero_gateway'),
-            __('Wownero', 'wownero_gateway'),
+            __('Arqma', 'arqma_gateway'),
+            __('Arqma', 'arqma_gateway'),
             'manage_woocommerce',
-            'wownero_gateway',
+            'arqma_gateway',
             array($this, 'orders_page'),
-            WOWNERO_GATEWAY_PLUGIN_URL.'/assets/images/wownero-icon-admin.png',
+            ARQMA_GATEWAY_PLUGIN_URL.'/assets/images/arqma-icon-admin.png',
             56 // Position on menu, woocommerce has 55.5, products has 55.6
         );
 
         add_submenu_page(
-            'wownero_gateway',
-            __('Payments', 'wownero_gateway'),
-            __('Payments', 'wownero_gateway'),
+            'arqma_gateway',
+            __('Payments', 'arqma_gateway'),
+            __('Payments', 'arqma_gateway'),
             'manage_woocommerce',
-            'wownero_gateway_payments',
+            'arqma_gateway_payments',
             array($this, 'payments_page')
         );
 
         $settings_page = add_submenu_page(
-            'wownero_gateway',
-            __('Settings', 'wownero_gateway'),
-            __('Settings', 'wownero_gateway'),
+            'arqma_gateway',
+            __('Settings', 'arqma_gateway'),
+            __('Settings', 'arqma_gateway'),
             'manage_options',
-            'wownero_gateway_settings',
+            'arqma_gateway_settings',
             array($this, 'settings_page')
         );
         add_action('load-'.$settings_page, array($this, 'settings_page_init'));
@@ -81,22 +81,22 @@ class Wownero_Admin_Interface {
      */
     public function admin_menu_update() {
         global $submenu;
-        if (isset($submenu['wownero_gateway'])) {
-            unset($submenu['wownero_gateway'][0]);
+        if (isset($submenu['arqma_gateway'])) {
+            unset($submenu['arqma_gateway'][0]);
         }
     }
 
     /**
-     * Wownero payments page
+     * Arqma payments page
      */
     public function payments_page() {
-        $payments_list = new Wownero_Admin_Payments_List();
+        $payments_list = new Arqma_Admin_Payments_List();
         $payments_list->prepare_items();
         $payments_list->display();
     }
 
     /**
-     * Wownero settings page
+     * Arqma settings page
      */
     public function settings_page() {
         WC_Admin_Settings::output();
@@ -105,7 +105,7 @@ class Wownero_Admin_Interface {
     public function settings_page_init() {
         global $current_tab, $current_section;
 
-        $current_section = 'wownero_gateway';
+        $current_section = 'arqma_gateway';
         $current_tab = 'checkout';
 
         // Include settings pages.
@@ -130,4 +130,4 @@ class Wownero_Admin_Interface {
 
 }
 
-return new Wownero_Admin_Interface();
+return new Arqma_Admin_Interface();

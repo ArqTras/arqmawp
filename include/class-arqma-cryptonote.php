@@ -1,4 +1,4 @@
-<?php
+ARQMA<?php
 /*
   Copyright (c) 2018 Monero-Integrations
 */
@@ -11,17 +11,17 @@ if(!class_exists('SHA3'))
 if(!class_exists('ed25519'))
     require_once('crypto/ed25519.php');
 
-require_once('class-wownero-base58.php');
+require_once('class-arqma-base58.php');
 
-class Wownero_Cryptonote
+class Arqma_Cryptonote
 {
     protected $ed25519;
     public function __construct()
     {
         $this->ed25519 = new ed25519();
-        $this->base58 = new Wownero_base58();
-        $this->address_prefix = WOWNERO_GATEWAY_ADDRESS_PREFIX;
-        $this->address_prefix_integrated = WOWNERO_GATEWAY_ADDRESS_PREFIX_INTEGRATED;
+        $this->base58 = new Arqma_base58();
+        $this->address_prefix = ARQMA_GATEWAY_ADDRESS_PREFIX;
+        $this->address_prefix_integrated = ARQMA_GATEWAY_ADDRESS_PREFIX_INTEGRATED;
     }
 
     /*
@@ -222,12 +222,12 @@ class Wownero_Cryptonote
     }
 
     /*
-     * Create a valid base58 encoded Wownero address from public keys
+     * Create a valid base58 encoded Arqma address from public keys
      *
      * @param string Public spend key
      * @param string Public view key
      *
-     * @return string Base58 encoded Wownero address
+     * @return string Base58 encoded Arqma address
      */
     public function encode_address($pSpendKey, $pViewKey)
     {
@@ -246,9 +246,9 @@ class Wownero_Cryptonote
     }
 
 /*
- * Decode a base58 encoded Wownero address
+ * Decode a base58 encoded Arqma address
  *
- * @param string A base58 encoded Wownero address
+ * @param string A base58 encoded Arqma address
  *
  * @return array An array containing the Address network byte, public spend key, and public view key
  */
@@ -291,11 +291,11 @@ class Wownero_Cryptonote
     }
 
     /*
-     * Generate a Wownero address from seed
+     * Generate a Arqma address from seed
      *
      * @param string Hex string to use as seed
      *
-     * @return string A base58 encoded Wownero address
+     * @return string A base58 encoded Arqma address
      */
     public function address_from_seed($hex_seed)
     {
