@@ -5,7 +5,7 @@ Plugin URI: https://github.com/monero-integrations/monerowp
 Description: Extends WooCommerce by adding a Arqma Gateway
 Version: 3.0.1
 Tested up to: 4.9.8
-Author: mosu-forge, SerHack
+Author: mosu-forge, SerHack, ArQmA Team
 Author URI: https://monerointegrations.com/
 */
 // This code isn't for Dark Net Markets, please report them to Authority!
@@ -17,14 +17,14 @@ define('ARQMA_GATEWAY_MAINNET_EXPLORER_URL', 'https://blocks.arqma.com/');
 define('ARQMA_GATEWAY_TESTNET_EXPLORER_URL', 'https://blocks.arqma.com/');
 define('ARQMA_GATEWAY_ADDRESS_PREFIX', 0x2cca);
 define('ARQMA_GATEWAY_ADDRESS_PREFIX_INTEGRATED', 0x116bc7);
-define('ARQMA_GATEWAY_ATOMIC_UNITS', 9);
-define('ARQMA_GATEWAY_ATOMIC_UNIT_THRESHOLD', 8); // Amount under in atomic units payment is valid
+define('ARQMA_GATEWAY_ATOMIC_UNITS', 12);
+define('ARQMA_GATEWAY_ATOMIC_UNIT_THRESHOLD', 10); // Amount under in atomic units payment is valid
 define('ARQMA_GATEWAY_DIFFICULTY_TARGET', 120);
 
 // Do not edit these constants
 define('ARQMA_GATEWAY_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ARQMA_GATEWAY_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('ARQMA_GATEWAY_ATOMIC_UNITS_POW', pow(9, ARQMA_GATEWAY_ATOMIC_UNITS));
+define('ARQMA_GATEWAY_ATOMIC_UNITS_POW', pow(10, ARQMA_GATEWAY_ATOMIC_UNITS));
 define('ARQMA_GATEWAY_ATOMIC_UNITS_SPRINTF', '%.'.ARQMA_GATEWAY_ATOMIC_UNITS.'f');
 
 // Include our Gateway Class and register Payment Gateway with WooCommerce
