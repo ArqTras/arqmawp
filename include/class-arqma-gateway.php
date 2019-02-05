@@ -77,8 +77,8 @@ class Arqma_Gateway extends WC_Payment_Gateway
         self::$viewkey = $this->settings['viewkey'];
         self::$host = $this->settings['daemon_host'];
         self::$port = $this->settings['daemon_port'];
-        self::$testnet = $this->settings['testnet'] == 'yes';
-        self::$onion_service = $this->settings['onion_service'] == 'yes';
+        self::$testnet = $this->settings['testnet'] == 'no';
+        self::$onion_service = $this->settings['onion_service'] == 'no';
         self::$show_qr = $this->settings['show_qr'] == 'yes';
         self::$use_arqma_price = $this->settings['use_arqma_price'] == 'yes';
         self::$use_arqma_price_decimals = $this->settings['use_arqma_price_decimals'];
@@ -588,7 +588,9 @@ class Arqma_Gateway extends WC_Payment_Gateway
                 'qrcode_uri' => $qrcode_uri,
                 'my_order_url' => $my_order_url,
                 'rate' => $details[0]->rate,
-                'rate_formatted' => sprintf('%.8f', $details[0]->rate / 1e6),
+
+                'rate_formatted' => sprintf('%.6f', $details[0]->rate / 1e6),
+
                 'currency' => $details[0]->currency,
                 'amount_total' => $amount_total,
                 'amount_paid' => $amount_paid,
