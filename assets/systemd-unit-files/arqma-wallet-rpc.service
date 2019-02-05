@@ -7,7 +7,7 @@ User=arqmaservices
 Group=arqmaservices
 WorkingDirectory=/opt/arqma-wallets
 Type=simple
-ExecStart=/opt/arqma-bin/arqma-wallet-rpc --wallet-file /opt/arqma-wallets/woocommerce --rpc-bind-port 18080 --password-file /opt/arqma-wallets/woocommerce.password --disable-rpc-login --log-file /var/log/arqma-wallet.log
+ExecStart=/opt/arqma-bin/arqma-wallet-rpc --wallet-file /opt/arqma-wallets/woocommerce --rpc-bind-port 19996 --password-file /opt/arqma-wallets/woocommerce.password --disable-rpc-login --log-file /var/log/arqma-wallet.log
 Restart=always
 
 [Install]
