@@ -133,9 +133,9 @@ class Arqma_Gateway extends WC_Payment_Gateway
 
     public function validate_confirms_field($key,$confirms)
     {
-        if($confirms >= 0 && $confirms <= 4)
+        if($confirms >= 0 && $confirms <= 18)
             return $confirms;
-        self::$_errors[] = 'Number of confirms must be between 0 and 60';
+        self::$_errors[] = 'Number of confirms must be between 0 and 18';
     }
 
     public function validate_valid_time_field($key,$valid_time)
