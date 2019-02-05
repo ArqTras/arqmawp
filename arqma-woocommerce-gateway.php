@@ -13,8 +13,8 @@ Author URI: https://monerointegrations.com/
 defined( 'ABSPATH' ) || exit;
 
 // Constants, you can edit these if you fork this repo
-define('ARQMA_GATEWAY_MAINNET_EXPLORER_URL', 'https://blocks.arqma.com/');
-define('ARQMA_GATEWAY_TESTNET_EXPLORER_URL', 'https://blocks.arqma.com/');
+define('ARQMA_GATEWAY_MAINNET_EXPLORER_URL', 'https://blockexplorer.arqma.com');
+define('ARQMA_GATEWAY_TESTNET_EXPLORER_URL', 'https://blocks.arqma.com');
 define('ARQMA_GATEWAY_ADDRESS_PREFIX', 0x2cca);
 define('ARQMA_GATEWAY_ADDRESS_PREFIX_INTEGRATED', 0x116bc7);
 define('ARQMA_GATEWAY_ATOMIC_UNITS', 9);

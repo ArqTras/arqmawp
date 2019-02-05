@@ -75,7 +75,7 @@ return array(
         'title' => __('Arqma wallet RPC port', 'arqma_gateway'),
         'type' => __('number'),
         'desc_tip' => __('This is the Wallet RPC port to authorize the payment with', 'arqma_gateway'),
-        'default' => '28080',
+        'default' => '19996',
     ),
     'testnet' => array(
         'title' => __(' Testnet', 'arqma_gateway'),
@@ -109,6 +109,6 @@ return array(
         'title' => __('Display Decimals', 'arqma_gateway'),
         'type' => __('number'),
         'description' => __('Number of decimal places to display on frontend. Upon checkout exact price will be displayed.'),
-        'default' => 11,
+        'default' => 9,
     ),
 );
