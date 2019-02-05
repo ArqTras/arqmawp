@@ -77,8 +77,8 @@ class Arqma_Gateway extends WC_Payment_Gateway
         self::$viewkey = $this->settings['viewkey'];
         self::$host = $this->settings['daemon_host'];
         self::$port = $this->settings['daemon_port'];
-        self::$testnet = $this->settings['testnet'] == 'yes';
-        self::$onion_service = $this->settings['onion_service'] == 'yes';
+        self::$testnet = $this->settings['testnet'] == 'no';
+        self::$onion_service = $this->settings['onion_service'] == 'no';
         self::$show_qr = $this->settings['show_qr'] == 'yes';
         self::$use_arqma_price = $this->settings['use_arqma_price'] == 'yes';
         self::$use_arqma_price_decimals = $this->settings['use_arqma_price_decimals'];
@@ -230,7 +230,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
         $currency = $order->get_currency();
         $rate = self::get_live_rate($currency);
         $fiat_amount = $order->get_total('');
-        $arqma_amount = 1e9 * $fiat_amount / $rate;
+        $arqma_amount = 1e6 * $fiat_amount / $rate;
 
         if(self::$discount)
             $arqma_amount = $arqma_amount - $arqma_amount * self::$discount / 100;
@@ -294,18 +294,18 @@ class Arqma_Gateway extends WC_Payment_Gateway
             $rates = $price['rates'];
             $table_name = $wpdb->prefix.'arqma_gateway_live_rates';
             //usd
-            $rate = intval($usd * 1e9);
+            $rate = intval($usd * 1e6);
             $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array('USD', $rate, $rate));
             $wpdb->query($query);
             //btc
-            $rate = intval($btc * 1e9);
+            $rate = intval($btc * 1e6);
             $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array('BTC', $rate, $rate));
             $wpdb->query($query);
 
             foreach( $rates as $currency=>$rate ) {
               if( $currency == 'USD' )
                 continue;
-              $rate = intval($rate * 1e9);
+              $rate = intval($rate * 1e6);
               $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array($currency, $usd*$rate, $usd*$rate));
               $wpdb->query($query);
             }
@@ -588,7 +588,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
                 'qrcode_uri' => $qrcode_uri,
                 'my_order_url' => $my_order_url,
                 'rate' => $details[0]->rate,
-                'rate_formatted' => sprintf('%.8f', $details[0]->rate / 1e9),
+                'rate_formatted' => sprintf('%.6f', $details[0]->rate / 1e6),
                 'currency' => $details[0]->currency,
                 'amount_total' => $amount_total,
                 'amount_paid' => $amount_paid,
@@ -727,7 +727,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
     public static function convert_wc_price($price, $currency)
     {
         $rate = self::get_live_rate($currency);
-        $arqma_amount = intval(ARQMA_GATEWAY_ATOMIC_UNITS_POW * 1e9 * $price / $rate) / ARQMA_GATEWAY_ATOMIC_UNITS_POW;
+        $arqma_amount = intval(ARQMA_GATEWAY_ATOMIC_UNITS_POW * 1e6 * $price / $rate) / ARQMA_GATEWAY_ATOMIC_UNITS_POW;
         $arqma_amount_formatted = sprintf('%.'.self::$use_arqma_price_decimals.'f', $arqma_amount);
 
         return <<<HTML
@@ -758,7 +758,7 @@ HTML;
         $price = array_pop($matches);
         $currency = $payment_details['currency'];
         $rate = $payment_details['rate'];
-        $arqma_amount = intval(ARQMA_GATEWAY_ATOMIC_UNITS_POW * 1e9 * $price / $rate) / ARQMA_GATEWAY_ATOMIC_UNITS_POW;
+        $arqma_amount = intval(ARQMA_GATEWAY_ATOMIC_UNITS_POW * 1e6 * $price / $rate) / ARQMA_GATEWAY_ATOMIC_UNITS_POW;
         $arqma_amount_formatted = sprintf('%.'.ARQMA_GATEWAY_ATOMIC_UNITS.'f', $arqma_amount);
 
         return <<<HTML
