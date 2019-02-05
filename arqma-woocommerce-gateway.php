@@ -13,8 +13,8 @@ Author URI: https://monerointegrations.com/
 defined( 'ABSPATH' ) || exit;
 
 // Constants, you can edit these if you fork this repo
-define('ARQMA_GATEWAY_MAINNET_EXPLORER_URL', 'https://blockexplorer.arqma.com');
-define('ARQMA_GATEWAY_TESTNET_EXPLORER_URL', 'https://blocks.arqma.com');
+define('ARQMA_GATEWAY_MAINNET_EXPLORER_URL', 'https://blockexplorer.arqma.com/');
+define('ARQMA_GATEWAY_TESTNET_EXPLORER_URL', 'https://blocks.arqma.com/');
 define('ARQMA_GATEWAY_ADDRESS_PREFIX', 0x2cca);
 define('ARQMA_GATEWAY_ADDRESS_PREFIX_INTEGRATED', 0x116bc7);
 define('ARQMA_GATEWAY_ATOMIC_UNITS', 9);
@@ -209,7 +209,7 @@ function arqma_install() {
     if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
         $sql = "CREATE TABLE $table_name (
                order_id BIGINT(20) UNSIGNED NOT NULL,
-               payment_id VARCHAR(64) DEFAULT '' NOT NULL,
+               payment_id VARCHAR(97) DEFAULT '' NOT NULL,
                currency VARCHAR(6) DEFAULT '' NOT NULL,
                rate BIGINT UNSIGNED DEFAULT 0 NOT NULL,
                amount BIGINT UNSIGNED DEFAULT 0 NOT NULL,
@@ -226,7 +226,7 @@ function arqma_install() {
     if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
         $sql = "CREATE TABLE $table_name (
                id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-               payment_id VARCHAR(100) DEFAULT '' NOT NULL,
+               payment_id VARCHAR(97) DEFAULT '' NOT NULL,
                txid VARCHAR(64) DEFAULT '' NOT NULL,
                amount BIGINT UNSIGNED DEFAULT 0 NOT NULL,
                height MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
