@@ -292,17 +292,17 @@ class Arqma_Gateway extends WC_Payment_Gateway
             $rates = $price['rates'];
             $table_name = $wpdb->prefix.'arqma_gateway_live_rates';
             //usd
-            $rate = intval($usd * 1e8);
+            $rate = intval($usd * 1e6);
             $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array('USD', $rate, $rate));
             $wpdb->query($query);
             //btc
-            $rate = intval($btc * 1e8);
+            $rate = intval($btc * 1e6);
             $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array('BTC', $rate, $rate));
             $wpdb->query($query);
             foreach( $rates as $currency=>$rate ) {
               if( $currency == 'USD' )
                 continue;
-              $rate = intval($rate * 1e8);
+              $rate = intval($rate * 1e6);
               $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array($currency, $usd*$rate, $usd*$rate));
               $wpdb->query($query);
             }
