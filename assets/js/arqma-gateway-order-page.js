@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2018, Ryo Currency Project
+*/
 function arqma_showNotification(message, type='success') {
     var toast = jQuery('<div class="' + type + '"><span>' + message + '</span></div>');
     jQuery('#arqma_toast').append(toast);
