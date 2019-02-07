@@ -111,7 +111,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
     public function validate_arqma_address_field($key,$address)
     {
         if($this->settings['confirm_type'] == 'viewkey') {
-            if (strlen($address) == 95 && substr($address, 0, 1) == '4')
+            if (strlen($address) == 97 && substr($address, 0, 1) == 'a')
                 if(self::$cryptonote->verify_checksum($address))
                     return $address;
             self::$_errors[] = 'Arqma address is invalid';
@@ -134,9 +134,9 @@ class Arqma_Gateway extends WC_Payment_Gateway
 
     public function validate_confirms_field($key,$confirms)
     {
-        if($confirms >= 0 && $confirms <= 60)
+        if($confirms >= 0 && $confirms <= 18)
             return $confirms;
-        self::$_errors[] = 'Number of confirms must be between 0 and 60';
+        self::$_errors[] = 'Number of confirms must be between 0 and 18';
     }
 
     public function validate_valid_time_field($key,$valid_time)
