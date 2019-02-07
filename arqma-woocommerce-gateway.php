@@ -210,7 +210,7 @@ function arqma_install() {
         $sql = "CREATE TABLE $table_name (
                order_id BIGINT(20) UNSIGNED NOT NULL,
                payment_id VARCHAR(97) DEFAULT '' NOT NULL,
-               currency VARCHAR(8) DEFAULT '' NOT NULL,
+               currency VARCHAR(6) DEFAULT '' NOT NULL,
                rate BIGINT UNSIGNED DEFAULT 0 NOT NULL,
                amount BIGINT UNSIGNED DEFAULT 0 NOT NULL,
                paid TINYINT NOT NULL DEFAULT 0,
@@ -239,7 +239,7 @@ function arqma_install() {
     $table_name = $wpdb->prefix . "arqma_gateway_live_rates";
     if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
         $sql = "CREATE TABLE $table_name (
-               currency VARCHAR(8) DEFAULT '' NOT NULL,
+               currency VARCHAR(6) DEFAULT '' NOT NULL,
                rate BIGINT UNSIGNED DEFAULT 0 NOT NULL,
                updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                PRIMARY KEY (currency)
