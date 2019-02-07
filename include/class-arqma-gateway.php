@@ -35,7 +35,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
     private static $arqma_explorer_tools;
     private static $log;
 
-    private static $currencies = array('BTC','USD','EUR','CAD','INR','GBP','COP','SGD','JPY');
+    private static $currencies = array('BTC','USD','EUR');
     private static $rates = array();
 
     private static $payment_details = array();
