@@ -1,4 +1,4 @@
-# ArQmA Gateway for WooCommerce
+# ArQmA Gateway for WooCommerce https://travis-ci.com/ArqTras/arqmawp.svg?branch=master
 
 ## Features
 
