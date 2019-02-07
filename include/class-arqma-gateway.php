@@ -583,7 +583,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
                 'qrcode_uri' => $qrcode_uri,
                 'my_order_url' => $my_order_url,
                 'rate' => $details[0]->rate,
-                'rate_formatted' => sprintf('%.6f', $details[0]->rate / 1e6),
+                'rate_formatted' => sprintf('%.8f', $details[0]->rate / 1e8),
                 'currency' => $details[0]->currency,
                 'amount_total' => $amount_total,
                 'amount_paid' => $amount_paid,
