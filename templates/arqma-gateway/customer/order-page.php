@@ -63,7 +63,7 @@
             </strong>
         </li>
         <li>
-            Exchange rate: <strong id="arqma_exchange_rate"></strong>
+            Exchange rate:<strong id="arqma_exchange_rate"></strong>
         </li>
     </ul>
 

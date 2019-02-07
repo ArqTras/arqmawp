@@ -4,7 +4,7 @@
  *
  * PHP Base58 codec
  *
- * Based on https://github.com/MoneroPy/moneropy/base58.py and https://github.com/mymonero/mymonero-core-js/cryptonote_utils/cryptonote_base58.js
+ * Based on https://github.com/ArqmaPy/arqmapy/base58.py and https://github.com/myarqma/myarqma-core-js/cryptonote_utils/cryptonote_base58.js
  *
  */
 

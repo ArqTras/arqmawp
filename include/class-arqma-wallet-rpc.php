@@ -7,8 +7,8 @@
  *
  * @author Kacper Rowinski <krowinski@implix.com>
  * http://implix.com
- * Modified to work with monero-rpc wallet by Serhack and cryptochangements
- * Modified to work with monero-wallet-rpc wallet by mosu-forge
+ * Modified to work with arqma-rpc wallet by Serhack and cryptochangements
+ * Modified to work with arqma-wallet-rpc wallet by mosu-forge
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -244,13 +244,6 @@ class Arqma_Wallet_Rpc
         return $incoming_transfers;
     }
 
-    public function get_transfers($arr)
-    {
-        $get_parameters = $arr;//array($input_type => $input_value);
-        $get_transfers = $this->_run('get_transfers', $get_parameters);
-        return $get_transfers;
-    }
-
     public function view_key()
     {
         $query_key = array('key_type' => 'view_key');
@@ -350,25 +343,24 @@ class Arqma_Wallet_Rpc
         return $get_bulk_payments;
     }
 
-    public function get_address($account_index = 0, $address_index = 0)
+    public function get_transfers($arr)
     {
-        $params = array('account_index' => $account_index, 'address_index' => $address_index);
-        return $this->_run('get_address', $params);
+        $get_parameters = $arr;
+        $get_transfers = $this->_run('get_transfers', $get_parameters);
+        return $get_transfers;
     }
+
     public function get_address_index($subaddress)
     {
         $params = array('address' => $subaddress);
         return $this->_run('get_address_index', $params);
     }
-    public function get_balance($account_index = 0, $address_index = 0)
-    {
-        $params = array('account_index' => $account_index, 'address_indices'=> $address_index);
-        return $this->_run('get_balance', $params);
-    }
+
     public function store()
     {
         return $this->_run('store');
     }
+
     public function create_address($account_index = 0, $label = '')
     {
         $params = array('account_index' => $account_index, 'label' => $label);

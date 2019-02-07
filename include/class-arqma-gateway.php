@@ -256,10 +256,27 @@ class Arqma_Gateway extends WC_Payment_Gateway
      * This cron runs every 30 seconds
      */
      public static function do_update_event()
-      {
-          global $wpdb;
-          // Get usd and btc price for arqma
-          $api_link = 'https://api.coingecko.com/api/v3/coins/arqma/tickers?page=1';
+    {
+        global $wpdb;
+        // Get usd and btc price for arqma
+        $api_link = 'https://api.coingecko.com/api/v3/coins/arqma/tickers?page=1';
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => $api_link,
+        ));
+        $resp = curl_exec($curl);
+        curl_close($curl);
+        $price = json_decode($resp, true);
+        if( ! isset( $price['tickers'][0]['converted_last']['usd'] ) ||
+            ! isset( $price['tickers'][0]['converted_last']['btc'] ) ) {
+          $this->log->add('Arqma_Gateway', '[ERROR] coingecko.com api');
+        }
+        else {
+          $usd = $price['tickers'][0]['converted_last']['usd'];
+          $btc = $price['tickers'][0]['converted_last']['btc'];
+          // get other currency rates based off usd
+          $api_link = 'https://api.exchangeratesapi.io/latest?base=USD';
           $curl = curl_init();
           curl_setopt_array($curl, array(
               CURLOPT_RETURNTRANSFER => 1,
@@ -268,46 +285,29 @@ class Arqma_Gateway extends WC_Payment_Gateway
           $resp = curl_exec($curl);
           curl_close($curl);
           $price = json_decode($resp, true);
-          if( ! isset( $price['tickers'][0]['converted_last']['usd'] ) ||
-              ! isset( $price['tickers'][0]['converted_last']['btc'] ) ) {
-            $this->log->add('Arqma_Gateway', '[ERROR] coingecko.com api');
+          if( ! isset( $price['rates'] ) ) {
+            $this->log->add('Arqma_Gateway', '[ERROR] exchangeratesapi.io');
           }
           else {
-            $usd = $price['tickers'][0]['converted_last']['usd'];
-            $btc = $price['tickers'][0]['converted_last']['btc'];
-            // get other currency rates based off usd
-            $api_link = 'https://api.exchangeratesapi.io/latest?base=USD';
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL => $api_link,
-            ));
-            $resp = curl_exec($curl);
-            curl_close($curl);
-            $price = json_decode($resp, true);
-            if( ! isset( $price['rates'] ) ) {
-              $this->log->add('Arqma_Gateway', '[ERROR] exchangeratesapi.io');
-            }
-            else {
-              $rates = $price['rates'];
-              $table_name = $wpdb->prefix.'arqma_gateway_live_rates';
-              //usd
-              $rate = intval($usd * 1e8);
-              $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array('USD', $rate, $rate));
+            $rates = $price['rates'];
+            $table_name = $wpdb->prefix.'arqma_gateway_live_rates';
+            //usd
+            $rate = intval($usd * 1e8);
+            $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array('USD', $rate, $rate));
+            $wpdb->query($query);
+            //btc
+            $rate = intval($btc * 1e8);
+            $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array('BTC', $rate, $rate));
+            $wpdb->query($query);
+            foreach( $rates as $currency=>$rate ) {
+              if( $currency == 'USD' )
+                continue;
+              $rate = intval($rate * 1e8);
+              $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array($currency, $usd*$rate, $usd*$rate));
               $wpdb->query($query);
-              //btc
-              $rate = intval($btc * 1e8);
-              $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array('BTC', $rate, $rate));
-              $wpdb->query($query);
-              foreach( $rates as $currency=>$rate ) {
-                if( $currency == 'USD' )
-                  continue;
-                $rate = intval($rate * 1e8);
-                $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array($currency, $usd*$rate, $usd*$rate));
-                $wpdb->query($query);
-              }
             }
           }
+        }
 
         // Get current network/wallet height
         if(self::$confirm_type == 'arqma-wallet-rpc')

@@ -75,7 +75,7 @@
             <a href="<?php echo ARQMA_GATEWAY_EXPLORER_URL.'/tx/'.$tx['txid']; ?>" target="_blank"><?php echo $tx['txid']; ?></a>
         </td>
         <td><?php echo $tx['height']; ?></td>
-        <td><?php echo sprintf(ARQMA_GATEWAY_ATOMIC_UNITS_SPRINTF, $tx['amount'] / ARQMA_GATEWAY_ATOMIC_UNITS_POW); ?> XMR</td>
+        <td><?php echo sprintf(ARQMA_GATEWAY_ATOMIC_UNITS_SPRINTF, $tx['amount'] / ARQMA_GATEWAY_ATOMIC_UNITS_POW); ?> ARQ</td>
     </tr>
     <?php endforeach; ?>
 </table>

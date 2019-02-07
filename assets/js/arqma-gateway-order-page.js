@@ -62,7 +62,7 @@ function arqma_updateDetails() {
             break;
     }
 
-    jQuery('#arqma_exchange_rate').html('1 ARQ = '+details.rate_formatted+' '+details.currency);
+    jQuery('#arqma_exchange_rate').html('1 XMR = '+details.rate_formatted+' '+details.currency);
     jQuery('#arqma_total_amount').html(details.amount_total_formatted);
     jQuery('#arqma_total_paid').html(details.amount_paid_formatted);
     jQuery('#arqma_total_due').html(details.amount_due_formatted);
@@ -87,7 +87,7 @@ function arqma_updateDetails() {
                 '<a href="'+arqma_explorer_url+'/tx/'+tx.txid+'" target="_blank">'+tx.txid+'</a>'+
                 '</td>'+
                 '<td>'+height+'</td>'+
-                '<td>'+tx.amount_formatted+' arqma</td>'+
+                '<td>'+tx.amount_formatted+' Arqma</td>'+
                 '</tr>';
 
             jQuery('#arqma_tx_table tbody').append(row);
@@ -110,7 +110,7 @@ function arqma_updateDetails() {
                 }
             }
             if(is_new_tx) {
-                arqma_showNotification('Transaction received for '+new_txs[i].amount_formatted+' arqma');
+                arqma_showNotification('Transaction received for '+new_txs[i].amount_formatted+' Arqma');
             }
         }
     }
