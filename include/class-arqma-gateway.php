@@ -35,7 +35,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
     private static $arqma_explorer_tools;
     private static $log;
 
-    private static $currencies = array('BTC','USD','EUR');
+    private static $currencies = array('BTC','USD','EUR','CAD','INR','GBP','COP','SGD','JPY');
     private static $rates = array();
 
     private static $payment_details = array();
@@ -78,8 +78,8 @@ class Arqma_Gateway extends WC_Payment_Gateway
         self::$viewkey = $this->settings['viewkey'];
         self::$host = $this->settings['daemon_host'];
         self::$port = $this->settings['daemon_port'];
-        self::$testnet = $this->settings['testnet'] == 'no';
-        self::$onion_service = $this->settings['onion_service'] == 'no';
+        self::$testnet = $this->settings['testnet'] == 'yes';
+        self::$onion_service = $this->settings['onion_service'] == 'yes';
         self::$show_qr = $this->settings['show_qr'] == 'yes';
         self::$use_arqma_price = $this->settings['use_arqma_price'] == 'yes';
         self::$use_arqma_price_decimals = $this->settings['use_arqma_price_decimals'];

@@ -17,8 +17,8 @@ define('ARQMA_GATEWAY_MAINNET_EXPLORER_URL', 'https://blockexplorer.arqma.com/')
 define('ARQMA_GATEWAY_TESTNET_EXPLORER_URL', 'https://blocks.arqma.com/');
 define('ARQMA_GATEWAY_ADDRESS_PREFIX', 0x2cca);
 define('ARQMA_GATEWAY_ADDRESS_PREFIX_INTEGRATED', 0x116bc7);
-define('ARQMA_GATEWAY_ATOMIC_UNITS', 9);
-define('ARQMA_GATEWAY_ATOMIC_UNIT_THRESHOLD', 6); // Amount under in atomic units payment is valid
+define('ARQMA_GATEWAY_ATOMIC_UNITS', 11);
+define('ARQMA_GATEWAY_ATOMIC_UNIT_THRESHOLD', 10); // Amount under in atomic units payment is valid
 define('ARQMA_GATEWAY_DIFFICULTY_TARGET', 120);
 
 // Do not edit these constants
@@ -176,9 +176,9 @@ function arqma_init() {
         $currency = strtoupper($a['currency']);
         $rate = Arqma_Gateway::get_live_rate($currency);
         if($currency == 'BTC')
-            $rate_formatted = sprintf('%.8f', $rate / 1e8);
-        else
             $rate_formatted = sprintf('%.6f', $rate / 1e6);
+        else
+            $rate_formatted = sprintf('%.5f', $rate / 1e5);
 
         return "<span class=\"arqma-price\">1 ARQ = $rate_formatted $currency</span>";
     }
