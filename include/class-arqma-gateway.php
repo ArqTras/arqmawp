@@ -35,14 +35,13 @@ class Arqma_Gateway extends WC_Payment_Gateway
     private static $arqma_explorer_tools;
     private static $log;
 
-    private static $currencies = array('BTC','USD','EUR','CAD','INR','GBP','COP','SGD','JPY');
     private static $rates = array();
 
     private static $payment_details = array();
 
     public function get_icon()
     {
-        return apply_filters('woocommerce_gateway_icon', '<img src="'.ARQMA_GATEWAY_PLUGIN_URL.'assets/images/arqma-icon.png"/>', $this->id);
+        return apply_filters('woocommerce_gateway_icon', '<img src="'.ARQMA_GATEWAY_PLUGIN_URL.'assets/images/arqma-icon.png"/>');
     }
 
     function __construct($add_action=true)
@@ -134,9 +133,9 @@ class Arqma_Gateway extends WC_Payment_Gateway
 
     public function validate_confirms_field($key,$confirms)
     {
-        if($confirms >= 0 && $confirms <= 18)
+        if($confirms >= 0 && $confirms <= 60)
             return $confirms;
-        self::$_errors[] = 'Number of confirms must be between 0 and 18';
+        self::$_errors[] = 'Number of confirms must be between 0 and 60';
     }
 
     public function validate_valid_time_field($key,$valid_time)
@@ -237,7 +236,6 @@ class Arqma_Gateway extends WC_Payment_Gateway
             $arqma_amount = $arqma_amount - $arqma_amount * self::$discount / 100;
 
         $arqma_amount = intval($arqma_amount * ARQMA_GATEWAY_ATOMIC_UNITS_POW);
-
         $query = $wpdb->prepare("INSERT INTO $table_name (order_id, payment_id, currency, rate, amount) VALUES (%d, %s, %s, %d, %d)", array($order_id, $payment_id, $currency, $rate, $arqma_amount));
         $wpdb->query($query);
 
@@ -255,9 +253,11 @@ class Arqma_Gateway extends WC_Payment_Gateway
      * function for verifying payments
      * This cron runs every 30 seconds
      */
-     public static function do_update_event()
+
+    public static function do_update_event()
     {
         global $wpdb;
+
         // Get usd and btc price for arqma
         $api_link = 'https://api.coingecko.com/api/v3/coins/arqma/tickers?page=1';
         $curl = curl_init();
@@ -275,6 +275,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
         else {
           $usd = $price['tickers'][0]['converted_last']['usd'];
           $btc = $price['tickers'][0]['converted_last']['btc'];
+
           // get other currency rates based off usd
           $api_link = 'https://api.exchangeratesapi.io/latest?base=USD';
           $curl = curl_init();
@@ -285,6 +286,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
           $resp = curl_exec($curl);
           curl_close($curl);
           $price = json_decode($resp, true);
+
           if( ! isset( $price['rates'] ) ) {
             $this->log->add('Arqma_Gateway', '[ERROR] exchangeratesapi.io');
           }
@@ -299,6 +301,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
             $rate = intval($btc * 1e8);
             $query = $wpdb->prepare("INSERT INTO $table_name (currency, rate, updated) VALUES (%s, %d, NOW()) ON DUPLICATE KEY UPDATE rate=%d, updated=NOW()", array('BTC', $rate, $rate));
             $wpdb->query($query);
+
             foreach( $rates as $currency=>$rate ) {
               if( $currency == 'USD' )
                 continue;
@@ -309,11 +312,14 @@ class Arqma_Gateway extends WC_Payment_Gateway
           }
         }
 
+
         // Get current network/wallet height
-        if(self::$confirm_type == 'arqma-wallet-rpc')
+        if(self::$confirm_type == 'arqma-wallet-rpc') {
             $height = self::$arqma_wallet_rpc->getheight();
-        else
+        }
+        else {
             $height = self::$arqma_explorer_tools->getheight();
+        }
         set_transient('arqma_gateway_network_height', $height);
 
         // Get pending payments
@@ -429,15 +435,15 @@ class Arqma_Gateway extends WC_Payment_Gateway
         }
     }
 
-    protected static function check_payment_rpc($subaddress)
+    protected static function check_payment_rpc($payment_id)
     {
         $txs = array();
-        $address_index = self::$arqma_wallet_rpc->get_address_index($subaddress);
+        $address_index = self::$arqma_wallet_rpc->get_address_index($payment_id);
         if(isset($address_index['index']['minor'])){
           $address_index = $address_index['index']['minor'];
         }
         else {
-          self::$log->add('Arqma_Gateway', '[ERROR] Couldn\'t get address index of subaddress: ' . $subaddress);
+          self::$log->add('Arqma_Gateway', '[ERROR] Couldn\'t get address index of subaddress: ' . $payment_id);
           return $txs;
         }
         $payments = self::$arqma_wallet_rpc->get_transfers(array( 'in' => true, 'pool' => true, 'subaddr_indices' => array($address_index)));
@@ -572,8 +578,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
                 }
             }
 
-            $amount_formatted = self::format_arqma($amount_due);
-            $qrcode_uri = 'arqma:'.$address.'?tx_amount='.$amount_formatted.'&tx_payment_id='.$payment_id;
+            $qrcode_uri = 'arqma:'.$address.'?tx_amount='.$amount_due.'&tx_payment_id='.$payment_id;
             $my_order_url = wc_get_endpoint_url('view-order', $order_id, wc_get_page_permalink('myaccount'));
 
             $payment_details = array(
