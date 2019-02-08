@@ -17,7 +17,7 @@ define('ARQMA_GATEWAY_MAINNET_EXPLORER_URL', 'https://blockexplorer.arqma.com/')
 define('ARQMA_GATEWAY_TESTNET_EXPLORER_URL', 'https://blocks.arqma.com/');
 define('ARQMA_GATEWAY_ADDRESS_PREFIX', 0x2cca);
 define('ARQMA_GATEWAY_ADDRESS_PREFIX_INTEGRATED', 0x116bc7);
-define('ARQMA_GATEWAY_ATOMIC_UNITS', 11);
+define('ARQMA_GATEWAY_ATOMIC_UNITS', 9);
 define('ARQMA_GATEWAY_ATOMIC_UNIT_THRESHOLD', 10); // Amount under in atomic units payment is valid
 define('ARQMA_GATEWAY_DIFFICULTY_TARGET', 120);
 
