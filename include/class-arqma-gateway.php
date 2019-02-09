@@ -209,7 +209,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
 
         $order = wc_get_order($order_id);
 
-        if(self::$confirm_type != 'arqma-wallet-rpc') {
+        if(true || self::$confirm_type != 'arqma-wallet-rpc') {
           // Generate a unique payment id
           do {
               $payment_id = bin2hex(openssl_random_pseudo_bytes(8));
@@ -536,7 +536,13 @@ class Arqma_Gateway extends WC_Payment_Gateway
             $payment_id = self::sanatize_id($details[0]->payment_id);
 
             if(self::$confirm_type == 'arqma-wallet-rpc') {
-                $integrated_addr = $payment_id;
+                $array_integrated_address = self::$arqma_wallet_rpc->make_integrated_address($payment_id);
+                if (isset($array_integrated_address['integrated_address'])) {
+                    $integrated_addr = $array_integrated_address['integrated_address'];
+                } else {
+                    self::$log->add('Arqma_Gateway', '[ERROR] Unable get integrated address');
+                    return '[ERROR] Unable get integrated address';
+                }
             } else {
                 if ($address) {
                     $decoded_address = self::$cryptonote->decode_address($address);
