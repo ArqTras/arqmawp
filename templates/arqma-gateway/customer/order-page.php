@@ -99,6 +99,6 @@
     var arqma_show_qr = <?php echo $show_qr ? 'true' : 'false'; ?>;
     var arqma_show_identicon = <?php echo $show_identicon ? 'true' : 'false'; ?>;
     var arqma_ajax_url = '<?php echo $ajax_url; ?>';
-    var arqma_explorer_url = '<?php echo RYO_GATEWAY_EXPLORER_URL; ?>';
+    var arqma_explorer_url = '<?php echo ARQMA_GATEWAY_EXPLORER_URL; ?>';
     var arqma_details = <?php echo $details_json; ?>;
 </script>
