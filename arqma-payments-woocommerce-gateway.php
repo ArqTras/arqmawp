@@ -1,24 +1,24 @@
 <?php
 /*
-Plugin Name: Arqma Woocommerce Gateway
-Plugin URI: https://github.com/monero-integrations/monerowp
-Description: Extends WooCommerce by adding a Arqma Gateway
-Version: 3.0.1
+Plugin Name: Arqma Payments Woocommerce Gateway
+Plugin URI: https://github.com/arqma-currency/arqma-payments-woocommerce-gateway
+Description: Extends WooCommerce by adding a Arqma-currency Gateway
+Version: 3.0.0
 Tested up to: 4.9.8
-Author: mosu-forge, SerHack, ArQmA Team
-Author URI: https://monerointegrations.com/
+Author: mosu-forge, SerHack
+Author URI: https://arqma-currency.com/
 */
 // This code isn't for Dark Net Markets, please report them to Authority!
 
 defined( 'ABSPATH' ) || exit;
 
 // Constants, you can edit these if you fork this repo
-define('ARQMA_GATEWAY_MAINNET_EXPLORER_URL', 'https://blockexplorer.arqma.com/');
-define('ARQMA_GATEWAY_TESTNET_EXPLORER_URL', 'https://blocks.arqma.com/');
-define('ARQMA_GATEWAY_ADDRESS_PREFIX', 0x2cca);
-define('ARQMA_GATEWAY_ADDRESS_PREFIX_INTEGRATED', 0x116bc7);
+define('ARQMA_GATEWAY_MAINNET_EXPLORER_URL', 'https://blocks.arqma.com');
+define('ARQMA_GATEWAY_TESTNET_EXPLORER_URL', 'https://blocks.arqma.com');
+define('ARQMA_GATEWAY_ADDRESS_PREFIX', 0x2cca);            // ar
+define('ARQMA_GATEWAY_ADDRESS_PREFIX_INTEGRATED', 0x116bc7); // aR
 define('ARQMA_GATEWAY_ATOMIC_UNITS', 9);
-define('ARQMA_GATEWAY_ATOMIC_UNIT_THRESHOLD', 10); // Amount under in atomic units payment is valid
+define('ARQMA_GATEWAY_ATOMIC_UNIT_THRESHOLD', 10); // Amount payment can be under in atomic units and still be valid
 define('ARQMA_GATEWAY_DIFFICULTY_TARGET', 120);
 
 // Do not edit these constants
@@ -108,7 +108,7 @@ function arqma_init() {
     function arqma_add_currency_symbol($currency_symbol, $currency) {
         switch ($currency) {
         case 'Arqma':
-            $currency_symbol = 'ARQ';
+            $currency_symbol = 'Arqma';
             break;
         }
         return $currency_symbol;
@@ -130,7 +130,7 @@ function arqma_init() {
 
         // These filters will replace the live rate with the exchange rate locked in for the order
         // We must be careful to hit all the hooks for price displays associated with an order,
-        // else the exchange rate can change dynamically (which it should for an order)
+        // else the exchange rate can change dynamically (which it should not for an order)
         add_filter('woocommerce_order_formatted_line_subtotal', 'arqma_order_item_price_format', 10, 3);
         function arqma_order_item_price_format($price_html, $item, $order) {
             return Arqma_Gateway::convert_wc_price_order($price_html, $order);
@@ -158,6 +158,8 @@ function arqma_init() {
             wp_dequeue_script('wc-cart-fragments');
         if(Arqma_Gateway::use_qr_code())
             wp_enqueue_script('arqma-qr-code', ARQMA_GATEWAY_PLUGIN_URL.'assets/js/qrcode.min.js');
+        if(Arqma_Gateway::use_identicons())
+            wp_enqueue_script('arqma-identicon', ARQMA_GATEWAY_PLUGIN_URL.'assets/js/blockies.min.js');
 
         wp_enqueue_script('arqma-clipboard-js', ARQMA_GATEWAY_PLUGIN_URL.'assets/js/clipboard.min.js');
         wp_enqueue_script('arqma-gateway', ARQMA_GATEWAY_PLUGIN_URL.'assets/js/arqma-gateway-order-page.js');
@@ -176,11 +178,11 @@ function arqma_init() {
         $currency = strtoupper($a['currency']);
         $rate = Arqma_Gateway::get_live_rate($currency);
         if($currency == 'BTC')
-            $rate_formatted = sprintf('%.6f', $rate / 1e6);
+            $rate_formatted = sprintf('%.8f', $rate / 1e8);
         else
-            $rate_formatted = sprintf('%.5f', $rate / 1e5);
+            $rate_formatted = sprintf('%.5f', $rate / 1e8);
 
-        return "<span class=\"arqma-price\">1 ARQ = $rate_formatted $currency</span>";
+        return "<span class=\"arqma-price\">1 Arqma = $rate_formatted $currency</span>";
     }
     add_shortcode('arqma-price', 'arqma_price_func');
 
@@ -209,7 +211,7 @@ function arqma_install() {
     if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
         $sql = "CREATE TABLE $table_name (
                order_id BIGINT(20) UNSIGNED NOT NULL,
-               payment_id VARCHAR(97) DEFAULT '' NOT NULL,
+               payment_id VARCHAR(16) DEFAULT '' NOT NULL,
                currency VARCHAR(6) DEFAULT '' NOT NULL,
                rate BIGINT UNSIGNED DEFAULT 0 NOT NULL,
                amount BIGINT UNSIGNED DEFAULT 0 NOT NULL,
@@ -226,7 +228,7 @@ function arqma_install() {
     if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
         $sql = "CREATE TABLE $table_name (
                id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-               payment_id VARCHAR(97) DEFAULT '' NOT NULL,
+               payment_id VARCHAR(16) DEFAULT '' NOT NULL,
                txid VARCHAR(64) DEFAULT '' NOT NULL,
                amount BIGINT UNSIGNED DEFAULT 0 NOT NULL,
                height MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,

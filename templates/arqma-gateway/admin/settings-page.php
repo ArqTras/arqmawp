@@ -18,7 +18,7 @@
     <?php echo $settings_html ?>
 </table>
 
-<h4><a href="https://github.com/arqma/arqmawp/blob/master/README.md">Learn more about using the Arqma WC payment gateway</a></h4>
+<h4><a href="https://github.com/arqma/arqmawp/blob/master/README.md">Learn more about using the Arqma payment gateway</a></h4>
 
 <script>
 function arqmaUpdateFields() {

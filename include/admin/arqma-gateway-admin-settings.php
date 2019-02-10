@@ -13,17 +13,17 @@ return array(
         'title' => __('Title', 'arqma_gateway'),
         'type' => 'text',
         'desc_tip' => __('Payment title the customer will see during the checkout process.', 'arqma_gateway'),
-        'default' => __('ARQ Payments', 'arqma_gateway')
+        'default' => __('Arqma Payments', 'arqma_gateway')
     ),
     'description' => array(
         'title' => __('Description', 'arqma_gateway'),
         'type' => 'textarea',
         'desc_tip' => __('Payment description the customer will see during the checkout process.', 'arqma_gateway'),
-        'default' => __('Pay securely using ARQ-currency. You will be provided payment details after checkout.', 'arqma_gateway')
+        'default' => __('Pay securely using Arqma-currency. You will be provided payment details after checkout.', 'arqma_gateway')
     ),
     'discount' => array(
-        'title' => __('Discount for using ARQ', 'arqma_gateway'),
-        'desc_tip' => __('Provide a discount to your customers for making a private payment with ARQ', 'arqma_gateway'),
+        'title' => __('Discount for using Arqma', 'arqma_gateway'),
+        'desc_tip' => __('Provide a discount to your customers for making a private payment with Arqma', 'arqma_gateway'),
         'description' => __('Enter a percentage discount (i.e. 5 for 5%) or leave this empty if you do not wish to provide a discount', 'arqma_gateway'),
         'type' => __('number'),
         'default' => '0'
@@ -54,10 +54,10 @@ return array(
         'default' => 'viewkey'
     ),
     'arqma_address' => array(
-        'title' => __('ARQ Address', 'arqma_gateway'),
+        'title' => __('Arqma Address', 'arqma_gateway'),
         'label' => __('Useful for people that have not a daemon online'),
         'type' => 'text',
-        'desc_tip' => __('ARQ Wallet Address (a)', 'arqma_gateway')
+        'desc_tip' => __('Arqma Wallet Address (RYoL)', 'arqma_gateway')
     ),
     'viewkey' => array(
         'title' => __('Secret Viewkey', 'arqma_gateway'),
@@ -66,16 +66,16 @@ return array(
         'desc_tip' => __('Your secret Viewkey', 'arqma_gateway')
     ),
     'daemon_host' => array(
-        'title' => __('ARQ wallet RPC Host/IP', 'arqma_gateway'),
+        'title' => __('Arqma wallet RPC Host/IP', 'arqma_gateway'),
         'type' => 'text',
         'desc_tip' => __('This is the Daemon Host/IP to authorize the payment with', 'arqma_gateway'),
         'default' => '127.0.0.1',
     ),
     'daemon_port' => array(
-        'title' => __('ARQ wallet RPC port', 'arqma_gateway'),
+        'title' => __('Arqma wallet RPC port', 'arqma_gateway'),
         'type' => __('number'),
         'desc_tip' => __('This is the Wallet RPC port to authorize the payment with', 'arqma_gateway'),
-        'default' => '19996',
+        'default' => '19999',
     ),
     'testnet' => array(
         'title' => __(' Testnet', 'arqma_gateway'),
@@ -99,16 +99,16 @@ return array(
         'default' => 'yes'
     ),
     'use_arqma_price' => array(
-        'title' => __('Show Prices in ARQ', 'arqma_gateway'),
-        'label' => __('Show Prices in ARQ', 'arqma_gateway'),
+        'title' => __('Show Prices in Arqma', 'arqma_gateway'),
+        'label' => __('Show Prices in Arqma', 'arqma_gateway'),
         'type' => 'checkbox',
-        'description' => __('Enable this to convert ALL prices on the frontend to ARQ (experimental)'),
+        'description' => __('Enable this to convert ALL prices on the frontend to Arqma (experimental)'),
         'default' => 'no'
     ),
     'use_arqma_price_decimals' => array(
         'title' => __('Display Decimals', 'arqma_gateway'),
         'type' => __('number'),
         'description' => __('Number of decimal places to display on frontend. Upon checkout exact price will be displayed.'),
-        'default' => 9,
+        'default' => 6,
     ),
 );

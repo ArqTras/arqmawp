@@ -1,6 +1,6 @@
 <?php
 /*
-  Copyright (c) 2018 Arqma-Integrations
+  Copyright (c) 2018 Monero-Integrations
 */
 
 defined( 'ABSPATH' ) || exit;
@@ -20,8 +20,8 @@ class Arqma_Cryptonote
     {
         $this->ed25519 = new ed25519();
         $this->base58 = new Arqma_base58();
-        $this->address_prefix = ARQMA_GATEWAY_ADDRESS_PREFIX;
-        $this->address_prefix_integrated = ARQMA_GATEWAY_ADDRESS_PREFIX_INTEGRATED;
+        $this->address_prefix = ARQMA_GATEWAY_ADDRESS_PREFIX; // RYoL
+        $this->address_prefix_integrated = ARQMA_GATEWAY_ADDRESS_PREFIX_INTEGRATED; // RYoN
     }
 
     /*
