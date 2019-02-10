@@ -296,7 +296,7 @@ class Arqma_Wallet_Rpc
         return $parsed_uri;
     }
 
-    public function transfer($amount, $address, $mixin = 6)
+    public function transfer($amount, $address, $mixin = 7)
     {
         $new_amount = $amount * ARQMA_GATEWAY_ATOMIC_UNITS_POW;
         $destinations = array('amount' => $new_amount, 'address' => $address);

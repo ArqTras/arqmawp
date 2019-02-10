@@ -22,6 +22,9 @@
         <li>
             Pay to:
             <strong class="arqma_details_row">
+                <?php if($show_identicon): ?>
+                <span class="arqma_details_left" id="arqma_identicon"></span>
+                <?php endif; ?>
                 <span class="arqma_details_main" id="arqma_integrated_address"></span>
                 <span class="arqma_details_right button-row">
                     <?php if($show_qr): ?>
@@ -40,7 +43,7 @@
             Total due:
             <strong class="arqma_details_row">
                 <span class="arqma_details_main">
-                    <span id="arqma_total_due"></span> ARQ
+                    <span id="arqma_total_due"></span> Arqma
                 </span>
                 <span class="arqma_details_right button-row">
                     <button href="#" class="button clipboard" title="Copy Amount"
@@ -53,13 +56,13 @@
         <li style="display:none">
             Total order amount:
             <strong>
-                <span id="arqma_total_amount"></span> ARQ
+                <span id="arqma_total_amount"></span> Arqma
             </strong>
         </li>
         <li>
             Total paid:
             <strong>
-                <span id="arqma_total_paid"></span> ARQ
+                <span id="arqma_total_paid"></span> Arqma
             </strong>
         </li>
         <li>
@@ -94,6 +97,7 @@
 
 <script type="text/javascript">
     var arqma_show_qr = <?php echo $show_qr ? 'true' : 'false'; ?>;
+    var arqma_show_identicon = <?php echo $show_identicon ? 'true' : 'false'; ?>;
     var arqma_ajax_url = '<?php echo $ajax_url; ?>';
     var arqma_explorer_url = '<?php echo ARQMA_GATEWAY_EXPLORER_URL; ?>';
     var arqma_details = <?php echo $details_json; ?>;

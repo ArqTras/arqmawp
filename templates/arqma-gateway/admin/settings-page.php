@@ -1,13 +1,13 @@
 <?php foreach($errors as $error): ?>
-<div class="error"><p><strong>Arqma Gateway Error</strong>: <?php echo $error; ?></p></div>
+<div class="error"><p><strong>Arqma Payments Error</strong>: <?php echo $error; ?></p></div>
 <?php endforeach; ?>
 
-<h1>Arqma Gateway Settings</h1>
+<h1>Arqma Payments Settings</h1>
 
 <?php if($confirm_type === 'arqma-wallet-rpc'): ?>
 <div style="border:1px solid #ddd;padding:5px 10px;">
     <?php
-         echo 'Wallet height' . $balance['height'] . '</br>';
+         echo 'Wallet height: ' . $balance['height'] . '</br>';
          echo 'Your balance is: ' . $balance['balance'] . '</br>';
          echo 'Unlocked balance: ' . $balance['unlocked_balance'] . '</br>';
          ?>
@@ -18,7 +18,7 @@
     <?php echo $settings_html ?>
 </table>
 
-<h4><a href="https://github.com/monero-integrations/monerowp">Learn more about using the Arqma payment gateway</a></h4>
+<h4><a href="https://github.com/arqma/arqmawp/blob/master/README.md">Learn more about using the Arqma WC payment gateway</a></h4>
 
 <script>
 function arqmaUpdateFields() {
