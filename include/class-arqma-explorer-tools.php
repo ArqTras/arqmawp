@@ -3,11 +3,12 @@
  * arqma_explorer_tools.php
  *
  * Uses CURL to call API functions from the block explorer
- * https://explorer.arqma-currency.com/api
+ * https://blocks.arqma.com/api
  *
  * @author Serhack
  * @author cryptochangements
  * @author mosu-forge
+ * @author ArqTras
  *
  */
 

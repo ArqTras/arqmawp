@@ -1,6 +1,7 @@
 <?php
 /*
   Copyright (c) 2018 Monero-Integrations
+  Copyright (c) 2018, ArQmA Currency Project
 */
 
 defined( 'ABSPATH' ) || exit;

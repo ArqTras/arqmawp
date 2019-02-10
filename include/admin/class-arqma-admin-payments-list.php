@@ -1,8 +1,9 @@
 <?php
 /*
- * Copyright (c) 2018, Arqma Currency Project
+ * Copyright (c) 2018, Ryo Currency Project
+ * Copyright (c) 2018, ArQmA Currency Project
  * Admin interface for Arqma gateway
- * Authors: mosu-forge
+ * Authors: mosu-forge, ArqTras
  */
 
 if(!class_exists('WP_List_Table')) {

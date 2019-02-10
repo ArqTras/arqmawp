@@ -1,12 +1,12 @@
 <?php
 /*
 Plugin Name: Arqma Payments Woocommerce Gateway
-Plugin URI: https://github.com/arqma-currency/arqma-payments-woocommerce-gateway
+Plugin URI: https://github.com/arqma/arqma-payments-woocommerce-gateway
 Description: Extends WooCommerce by adding a Arqma-currency Gateway
-Version: 3.0.0
+Version: 1.0.0
 Tested up to: 4.9.8
-Author: mosu-forge, SerHack
-Author URI: https://arqma-currency.com/
+Author: mosu-forge, SerHack, ArqTras
+Author URI: https://arqma.com/
 */
 // This code isn't for Dark Net Markets, please report them to Authority!
 
