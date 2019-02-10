@@ -40,7 +40,7 @@ return array(
         'desc_tip' => __('Number of confirms a transaction must have to be valid', 'arqma_gateway'),
         'description' => __('Enter the number of confirms that transactions must have. Enter 0 to zero-confim. Each confirm will take approximately four minutes', 'arqma_gateway'),
         'type' => __('number'),
-        'default' => '5'
+        'default' => '0'
     ),
     'confirm_type' => array(
         'title' => __('Confirmation Type', 'arqma_gateway'),
@@ -57,7 +57,7 @@ return array(
         'title' => __('Arqma Address', 'arqma_gateway'),
         'label' => __('Useful for people that have not a daemon online'),
         'type' => 'text',
-        'desc_tip' => __('Arqma Wallet Address (RYoL)', 'arqma_gateway')
+        'desc_tip' => __('Arqma Wallet Address (a)', 'arqma_gateway')
     ),
     'viewkey' => array(
         'title' => __('Secret Viewkey', 'arqma_gateway'),
@@ -109,6 +109,6 @@ return array(
         'title' => __('Display Decimals', 'arqma_gateway'),
         'type' => __('number'),
         'description' => __('Number of decimal places to display on frontend. Upon checkout exact price will be displayed.'),
-        'default' => 6,
+        'default' => 9,
     ),
 );
