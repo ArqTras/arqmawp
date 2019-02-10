@@ -43,7 +43,7 @@
             Total due:
             <strong class="arqma_details_row">
                 <span class="arqma_details_main">
-                    <span id="arqma_total_due"></span> Arqma
+                    <span id="arqma_total_due"></span> ARQ
                 </span>
                 <span class="arqma_details_right button-row">
                     <button href="#" class="button clipboard" title="Copy Amount"
@@ -56,13 +56,13 @@
         <li style="display:none">
             Total order amount:
             <strong>
-                <span id="arqma_total_amount"></span> Arqma
+                <span id="arqma_total_amount"></span> ARQ
             </strong>
         </li>
         <li>
             Total paid:
             <strong>
-                <span id="arqma_total_paid"></span> Arqma
+                <span id="arqma_total_paid"></span> ARQ
             </strong>
         </li>
         <li>
