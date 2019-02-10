@@ -1,4 +1,4 @@
-# ArQmA Gateway for WooCommerce 
+# ArQmA Gateway for WooCommerce
 [![Build Status](https://travis-ci.com/ArqTras/arqmawp.svg?branch=master)](https://travis-ci.org/arqtras/arqmawp)
 
 ## Features
@@ -101,7 +101,11 @@ This will display a badge showing that you accept Arqma-currency.
 
 ![Arqma Accepted Here](/assets/images/arqma-accepted-here.png?raw=true "Arqma Accepted Here")
 
+## Credits
+
+Credit is due to @mosu-forge @cryptochangements34 and @SerHack for their monerowp plugin that this is based on.
+
 ## Donations
 
 monero-integrations: 44krVcL6TPkANjpFwS2GWvg1kJhTrN7y9heVeQiDJ3rP8iGbCd5GeA4f3c2NKYHC1R4mCgnW7dsUUUae2m9GiNBGT4T8s2X
-guy who converted it to wownero: Wo57gnyJUihhnfpr7rbjv8Q9eJ8igcbyFPtbPogbLoGaLrYCV3RZHANc1SCJoL3WkCD6XGHbVaWYminF6rCzei6Y1Bhix1iRn
+mosu_forge:
