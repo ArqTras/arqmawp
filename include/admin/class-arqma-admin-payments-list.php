@@ -1,7 +1,8 @@
 <?php
 /*
  * Copyright (c) 2018, Ryo Currency Project
- * Admin interface for Arqma gateway
+ * Copyright (c) 2018, ArQmA Currency Project
+ * Admin interface for ARQ gateway
  * Authors: mosu-forge
  */
 
@@ -69,7 +70,7 @@ HTML;
             }
             echo <<<HTML
             <div class="wrap">
-                <h1 class="wp-heading-inline">Arqma Payments</h1>
+                <h1 class="wp-heading-inline">ARQ Payments</h1>
                 $balance_info
                 <hr class="wp-header-end">
                 <ul class="subsubsub">
@@ -107,7 +108,7 @@ HTML;
                     </p>
                     $hidden_fields
                 </form>
-                <h2 class="screen-reader-text">Arqma Payments List</h2>
+                <h2 class="screen-reader-text">ARQ Payments List</h2>
                 <style>
                     #col_order_id { width: 150px; }
                     #col_payment_id { width: 150px; }
@@ -145,7 +146,7 @@ HTML;
             echo $item->height;
             break;
         case 'col_amount':
-            echo Arqma_Gateway::format_arqma($item->amount).' Arqma';
+            echo Arqma_Gateway::format_arqma($item->amount).' ARQ';
             break;
         }
     }
@@ -200,7 +201,7 @@ HTML;
     }
 
     public function no_items() {
-        esc_html_e('No Arqma payments found', 'arqma_gateway');
+        esc_html_e('No ARQ payments found', 'arqma_gateway');
     }
 
     protected function get_filter_vars() {

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2018, Ryo Currency Project
+ * Copyright (c) 2018, Arqma Currency Project
  * Admin interface for Arqma gateway
  * Authors: mosu-forge
  */
@@ -27,7 +27,7 @@ class Arqma_Admin_Interface {
     public function meta_boxes() {
         add_meta_box(
             'arqma_admin_order_details',
-            __('Arqma Gateway','arqma_gateway'),
+            __('Arqma Payments','arqma_gateway'),
             array($this, 'meta_box_order_details'),
             'shop_order',
             'normal',

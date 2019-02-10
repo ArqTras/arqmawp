@@ -69,6 +69,14 @@ function arqma_updateDetails() {
 
     jQuery('#arqma_integrated_address').html(details.integrated_address);
 
+    if(arqma_show_identicon) {
+        var icon = blockies.create({
+            scale: 5,
+            seed: details.integrated_address
+        });
+        jQuery('#arqma_identicon').html('').append(icon);
+    }
+
     if(arqma_show_qr) {
         var qr = jQuery('#arqma_qr_code').html('');
         new QRCode(qr.get(0), details.qrcode_uri);
@@ -87,7 +95,7 @@ function arqma_updateDetails() {
                 '<a href="'+arqma_explorer_url+'/tx/'+tx.txid+'" target="_blank">'+tx.txid+'</a>'+
                 '</td>'+
                 '<td>'+height+'</td>'+
-                '<td>'+tx.amount_formatted+' Arqma</td>'+
+                '<td>'+tx.amount_formatted+' ARQ</td>'+
                 '</tr>';
 
             jQuery('#arqma_tx_table tbody').append(row);
@@ -110,7 +118,7 @@ function arqma_updateDetails() {
                 }
             }
             if(is_new_tx) {
-                arqma_showNotification('Transaction received for '+new_txs[i].amount_formatted+' Arqma');
+                arqma_showNotification('Transaction received for '+new_txs[i].amount_formatted+' ARQ');
             }
         }
     }
