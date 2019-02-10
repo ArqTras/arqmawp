@@ -230,7 +230,7 @@ class Arqma_Gateway extends WC_Payment_Gateway
         );
     }
 
-    /*
+      /*
        * function for verifying payments
        * This cron runs every 30 seconds
        */

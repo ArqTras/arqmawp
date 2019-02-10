@@ -108,4 +108,5 @@ Credit is due to @mosu-forge @cryptochangements34 and @SerHack for their monerow
 ## Donations
 
 monero-integrations: 44krVcL6TPkANjpFwS2GWvg1kJhTrN7y9heVeQiDJ3rP8iGbCd5GeA4f3c2NKYHC1R4mCgnW7dsUUUae2m9GiNBGT4T8s2X
-mosu_forge:
+mosu_forge: ar4Ki4t462uUCwrdaT12W49oudwkonrbG9yT1Y5s4RZUYjMDJg1fZMS57HefnjAWpn2tjjeQpNHqyH2KbXawgJWU1Lg8BYtKe
+ArQmA Network: 32DEr9inVahpfYL8NSLFHVftJqY3Rb1tUb
