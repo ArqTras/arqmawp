@@ -7,7 +7,7 @@
  *
  * @author Kacper Rowinski <krowinski@implix.com>
  * http://implix.com
- * Modified to work with arqma-rpc wallet by Serhack and cryptochangements
+ * Modified to work with monero-rpc wallet by Serhack and cryptochangements
  * Modified to work with arqma-wallet-rpc wallet by mosu-forge
  */
 
@@ -244,6 +244,13 @@ class Arqma_Wallet_Rpc
         return $incoming_transfers;
     }
 
+    public function get_transfers($input_type, $input_value)
+    {
+        $get_parameters = array($input_type => $input_value);
+        $get_transfers = $this->_run('get_transfers', $get_parameters);
+        return $get_transfers;
+    }
+
     public function view_key()
     {
         $query_key = array('key_type' => 'view_key');
@@ -341,31 +348,5 @@ class Arqma_Wallet_Rpc
         $get_bulk_payments_parameters = array('payment_id' => $payment_id, 'min_block_height' => $min_block_height);
         $get_bulk_payments = $this->_run('get_bulk_payments', $get_bulk_payments_parameters);
         return $get_bulk_payments;
-    }
-
-    public function get_transfers($arr)
-    {
-        $get_parameters = $arr;
-        $get_transfers = $this->_run('get_transfers', $get_parameters);
-        return $get_transfers;
-    }
-
-    public function get_address_index($subaddress)
-    {
-        $params = array('address' => $subaddress);
-        return $this->_run('get_address_index', $params);
-    }
-
-    public function store()
-    {
-        return $this->_run('store');
-    }
-
-    public function create_address($account_index = 0, $label = '')
-    {
-        $params = array('account_index' => $account_index, 'label' => $label);
-        $create_address_method = $this->_run('create_address', $params);
-        $save = $this->store(); // Save wallet state after subaddress creation
-        return $create_address_method;
     }
 }
